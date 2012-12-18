@@ -17,7 +17,7 @@
 Summary: Linux-based operating system develop/build/deploy tool
 Name: ostree
 Version: 2012.12
-Release: 1%{?dist}
+Release: 2%{?dist}
 #VCS: git:git://git.gnome.org/ostree
 Source0: http://ftp.gnome.org/pub/GNOME/sources/ostree/%{version}/%{build_name}-%{version}.tar.gz
 # The libostree.so (currently private) shared library, and almost all
@@ -73,6 +73,7 @@ env NOCONFIGURE=1 ./autogen.sh
 %configure --disable-silent-rules \
 	   --enable-documentation \
 	   --disable-libarchive \
+	   --enable-grub2-hook \
 	   %{embedded_dependencies_option}
 make %{?_smp_mflags}
 
@@ -84,6 +85,7 @@ rm -rf $RPM_BUILD_ROOT
 
 %files
 %doc COPYING README.md
+%{_sysconfdir}/grub.d/15_ostree
 %{_bindir}/ostree
 %{_bindir}/ostree-pull
 %{_bindir}/ostree-run-triggers
@@ -105,6 +107,9 @@ rm -rf $RPM_BUILD_ROOT
 %{_mandir}/man1/*.gz
 
 %changelog
+* Tue Dec 18 2012 Colin Walters <walters@verbum.org> - 2012.12-2
+- Explicitly enable grub2 hook; otherwise we pick up whatever
+  the buildroot has, which is not what we want.
 
 * Mon Nov 19 2012 Colin Walters <walters@verbum.org> - 2012.12-1
 - Initial import; thanks to Michel Alexandre Salim for review
