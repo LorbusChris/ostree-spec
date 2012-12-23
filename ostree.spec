@@ -16,10 +16,10 @@
 
 Summary: Linux-based operating system develop/build/deploy tool
 Name: ostree
-Version: 2012.12
-Release: 2%{?dist}
+Version: 2012.13
+Release: 1%{?dist}
 #VCS: git:git://git.gnome.org/ostree
-Source0: http://ftp.gnome.org/pub/GNOME/sources/ostree/%{version}/%{build_name}-%{version}.tar.gz
+Source0: http://ftp.gnome.org/pub/GNOME/sources/ostree/%{version}/%{build_name}-%{version}.tar.xz
 # The libostree.so (currently private) shared library, and almost all
 # of the utilities are licensed under the LGPLv2+.  Only at present
 # one utility program (ostree-switch-root) is forked from util-linux under
@@ -107,6 +107,9 @@ rm -rf $RPM_BUILD_ROOT
 %{_mandir}/man1/*.gz
 
 %changelog
+* Sun Dec 23 2012 Colin Walters <walters@verbum.org> - 2012.13-1
+- New upstream release
+
 * Tue Dec 18 2012 Colin Walters <walters@verbum.org> - 2012.12-2
 - Explicitly enable grub2 hook; otherwise we pick up whatever
   the buildroot has, which is not what we want.
