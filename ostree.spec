@@ -16,8 +16,8 @@
 
 Summary: Linux-based operating system develop/build/deploy tool
 Name: ostree
-Version: 2012.13
-Release: 2%{?dist}
+Version: 2013.2
+Release: 1%{?dist}
 #VCS: git:git://git.gnome.org/ostree
 Source0: http://ftp.gnome.org/pub/GNOME/sources/ostree/%{version}/%{build_name}-%{version}.tar.xz
 # The libostree.so (currently private) shared library, and almost all
@@ -107,6 +107,9 @@ rm -rf $RPM_BUILD_ROOT
 %{_mandir}/man1/*.gz
 
 %changelog
+* Mon Apr 01 2013 Colin Walters <walters@verbum.org> - 2013.1-1
+- New upstream release
+
 * Thu Feb 14 2013 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 2012.13-2
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_19_Mass_Rebuild
 
