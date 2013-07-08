@@ -16,7 +16,7 @@
 
 Summary: Linux-based operating system develop/build/deploy tool
 Name: ostree
-Version: 2013.2
+Version: 2013.3
 Release: 1%{?dist}
 #VCS: git:git://git.gnome.org/ostree
 Source0: http://ftp.gnome.org/pub/GNOME/sources/ostree/%{version}/%{build_name}-%{version}.tar.xz
@@ -36,8 +36,10 @@ BuildRequires: autoconf automake libtool
 BuildRequires: libattr-devel
 # For docs
 BuildRequires: gtk-doc
+BuildRequires: dracut
 
 Requires: linux-user-chroot
+Requires: dracut
 
 # Embedded GLib dependencies
 %if 0%{?enable_embedded_dependencies}
@@ -74,6 +76,8 @@ env NOCONFIGURE=1 ./autogen.sh
 	   --enable-documentation \
 	   --disable-libarchive \
 	   --enable-grub2-hook \
+	   --disable-kernel-updates \
+	   --with-dracut \
 	   %{embedded_dependencies_option}
 make %{?_smp_mflags}
 
@@ -87,10 +91,13 @@ rm -rf $RPM_BUILD_ROOT
 %doc COPYING README.md
 %{_sysconfdir}/grub.d/15_ostree
 %{_bindir}/ostree
-%{_bindir}/ostree-pull
-%{_bindir}/ostree-run-triggers
-%{_sbindir}/ostree-switch-root
-%{_libexecdir}/ostreed
+%{_sbindir}/ostree-prepare-root
+%{_sbindir}/ostree-remount
+%{_sysconfdir}/dracut.conf.d/ostree.conf
+%dir %{_prefix}/lib/dracut/modules.d/98ostree
+%{_prefix}/lib/systemd/system/ostree*.service
+%{_prefix}/lib/systemd/system/*.target.wants/ostree*.service
+%{_prefix}/lib/dracut/modules.d/98ostree/*
 %dir %{_libdir}/ostree
 %{_libdir}/ostree/*.so
 %if 0%{?enable_embedded_dependencies}
@@ -101,12 +108,12 @@ rm -rf $RPM_BUILD_ROOT
 %{_libdir}/ostree/libgio*.so*
 %{_libdir}/ostree/libsoup*.so*
 %endif
-%dir %{_libexecdir}/ostree
-%dir %{_libexecdir}/ostree/triggers.d
-%{_libexecdir}/ostree/triggers.d/*
 %{_mandir}/man1/*.gz
 
 %changelog
+* Sun Jul 07 2013 Colin Walters <walters@verbum.org> - 2013.3-1
+- New upstream release
+
 * Mon Apr 01 2013 Colin Walters <walters@verbum.org> - 2013.1-1
 - New upstream release
 
