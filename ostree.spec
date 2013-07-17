@@ -16,7 +16,7 @@
 
 Summary: Linux-based operating system develop/build/deploy tool
 Name: ostree
-Version: 2013.3
+Version: 2013.4
 Release: 1%{?dist}
 #VCS: git:git://git.gnome.org/ostree
 Source0: http://ftp.gnome.org/pub/GNOME/sources/ostree/%{version}/%{build_name}-%{version}.tar.xz
@@ -75,8 +75,6 @@ env NOCONFIGURE=1 ./autogen.sh
 %configure --disable-silent-rules \
 	   --enable-documentation \
 	   --disable-libarchive \
-	   --enable-grub2-hook \
-	   --disable-kernel-updates \
 	   --with-dracut \
 	   %{embedded_dependencies_option}
 make %{?_smp_mflags}
@@ -89,7 +87,6 @@ rm -rf $RPM_BUILD_ROOT
 
 %files
 %doc COPYING README.md
-%{_sysconfdir}/grub.d/15_ostree
 %{_bindir}/ostree
 %{_sbindir}/ostree-prepare-root
 %{_sbindir}/ostree-remount
@@ -111,6 +108,9 @@ rm -rf $RPM_BUILD_ROOT
 %{_mandir}/man1/*.gz
 
 %changelog
+* Tue Jul 16 2013 Colin Walters <walters@verbum.org> - 2013.4-1
+- New upstream release
+
 * Sun Jul 07 2013 Colin Walters <walters@verbum.org> - 2013.3-1
 - New upstream release
 
