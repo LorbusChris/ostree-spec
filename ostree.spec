@@ -16,8 +16,8 @@
 
 Summary: Linux-based operating system develop/build/deploy tool
 Name: ostree
-Version: 2013.4
-Release: 2%{?dist}
+Version: 2013.5
+Release: 1%{?dist}
 #VCS: git:git://git.gnome.org/ostree
 Source0: http://ftp.gnome.org/pub/GNOME/sources/ostree/%{version}/%{build_name}-%{version}.tar.xz
 # The libostree.so (currently private) shared library, and almost all
@@ -40,6 +40,7 @@ BuildRequires: dracut
 
 Requires: linux-user-chroot
 Requires: dracut
+Requires: systemd-units
 
 # Embedded GLib dependencies
 %if 0%{?enable_embedded_dependencies}
@@ -58,8 +59,18 @@ BuildRequires: pkgconfig(gio-unix-2.0)
 BuildRequires: pkgconfig(libsoup-2.4)
 %endif
 
+BuildRequires: pkgconfig(systemd)
+
 %description
 See http://live.gnome.org/OSTree
+
+%package devel
+Summary: Development headers for %{name}
+Group: Development/Libraries
+Requires: %{name} = %{version}-%{release}
+
+%description devel
+The %{name}-devel package includes the header files for the %{name} library.
 
 %prep
 %setup -q -n %{build_name}-%{version}
@@ -73,7 +84,7 @@ env NOCONFIGURE=1 ./autogen.sh
 %endif
 
 %configure --disable-silent-rules \
-	   --enable-documentation \
+	   --enable-gtk-doc \
 	   --disable-libarchive \
 	   --with-dracut \
 	   %{embedded_dependencies_option}
@@ -81,9 +92,16 @@ make %{?_smp_mflags}
 
 %install
 make install DESTDIR=$RPM_BUILD_ROOT INSTALL="install -p -c"
+find $RPM_BUILD_ROOT -name '*.la' -delete
 
 %clean
 rm -rf $RPM_BUILD_ROOT
+
+%post
+%systemd_post ostree-remount.service
+
+%preun
+%systemd_preun ostree-remount.service
 
 %files
 %doc COPYING README.md
@@ -93,10 +111,8 @@ rm -rf $RPM_BUILD_ROOT
 %{_sysconfdir}/dracut.conf.d/ostree.conf
 %dir %{_prefix}/lib/dracut/modules.d/98ostree
 %{_prefix}/lib/systemd/system/ostree*.service
-%{_prefix}/lib/systemd/system/*.target.wants/ostree*.service
 %{_prefix}/lib/dracut/modules.d/98ostree/*
-%dir %{_libdir}/ostree
-%{_libdir}/ostree/*.so
+%{_libdir}/*.so.1*
 %if 0%{?enable_embedded_dependencies}
 %{_libdir}/ostree/libglib*.so*
 %{_libdir}/ostree/libgmodule*.so*
@@ -107,7 +123,18 @@ rm -rf $RPM_BUILD_ROOT
 %endif
 %{_mandir}/man1/*.gz
 
+%files devel
+%{_libdir}/lib*.so
+%{_includedir}/*
+%{_libdir}/pkgconfig/*
+%dir %{_datadir}/gtk-doc/html/ostree
+%{_datadir}/gtk-doc/html/ostree
+
 %changelog
+* Sat Aug 17 2013 Colin Walters <walters@verbum.org> - 2013.5-1
+- New upstream release
+- Add devel package
+
 * Sat Aug 03 2013 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 2013.4-2
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_20_Mass_Rebuild
 
