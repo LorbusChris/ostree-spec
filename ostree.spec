@@ -17,7 +17,7 @@
 Summary: Linux-based operating system develop/build/deploy tool
 Name: ostree
 Version: 2013.5
-Release: 1%{?dist}
+Release: 2%{?dist}
 #VCS: git:git://git.gnome.org/ostree
 Source0: http://ftp.gnome.org/pub/GNOME/sources/ostree/%{version}/%{build_name}-%{version}.tar.xz
 # The libostree.so (currently private) shared library, and almost all
@@ -38,7 +38,6 @@ BuildRequires: libattr-devel
 BuildRequires: gtk-doc
 BuildRequires: dracut
 
-Requires: linux-user-chroot
 Requires: dracut
 Requires: systemd-units
 
@@ -131,6 +130,11 @@ rm -rf $RPM_BUILD_ROOT
 %{_datadir}/gtk-doc/html/ostree
 
 %changelog
+* Sat Aug 25 2013 Colin Walters <walters@verbum.org> - 2013.5-2
+- Drop requirement on linux-user-chroot
+  We now require triggers to be processed on the build server
+  by default, so ostree does not runtime-depend on linux-user-chroot.
+
 * Sat Aug 17 2013 Colin Walters <walters@verbum.org> - 2013.5-1
 - New upstream release
 - Add devel package
