@@ -1,25 +1,9 @@
-# Define this if we want to build with embedded dependencies
-# for e.g. RHEL6
-%define enable_embedded_dependencies 0
-
-%if 0%{?enable_embedded_dependencies}
-%define build_name ostree-embeddeps
-%else
-%define build_name ostree
-%endif
-
-%if 0%{?rhel}
-# HACK to fix building on RHEL6; find_debuginfo is crashing, not sure
-# why
-%define debug_package %{nil}
-%endif
-
 Summary: Linux-based operating system develop/build/deploy tool
 Name: ostree
 Version: 2013.5
-Release: 2%{?dist}
+Release: 3%{?dist}
 #VCS: git:git://git.gnome.org/ostree
-Source0: http://ftp.gnome.org/pub/GNOME/sources/ostree/%{version}/%{build_name}-%{version}.tar.xz
+Source0: http://ftp.gnome.org/pub/GNOME/sources/ostree/%{version}/ostree-%{version}.tar.xz
 # The libostree.so (currently private) shared library, and almost all
 # of the utilities are licensed under the LGPLv2+.  Only at present
 # one utility program (ostree-switch-root) is forked from util-linux under
@@ -41,23 +25,8 @@ BuildRequires: dracut
 Requires: dracut
 Requires: systemd-units
 
-# Embedded GLib dependencies
-%if 0%{?enable_embedded_dependencies}
-BuildRequires: glibc-devel
-BuildRequires: pkgconfig(libffi)
-BuildRequires: python-devel
-BuildRequires: pkgconfig(zlib)
-BuildRequires: pkgconfig(libselinux)
-
-# Embedded libsoup dependencies
-BuildRequires: gnome-common
-BuildRequires: intltool
-BuildRequires: pkgconfig(libxml-2.0)
-%else
 BuildRequires: pkgconfig(gio-unix-2.0)
 BuildRequires: pkgconfig(libsoup-2.4)
-%endif
-
 BuildRequires: pkgconfig(systemd)
 
 %description
@@ -72,21 +41,14 @@ Requires: %{name} = %{version}-%{release}
 The %{name}-devel package includes the header files for the %{name} library.
 
 %prep
-%setup -q -n %{build_name}-%{version}
+%setup -q -n ostree-%{version}
 
 %build
 env NOCONFIGURE=1 ./autogen.sh
-%if 0%{?enable_embedded_dependencies}
-%define embedded_dependencies_option --enable-embedded-dependencies
-%else
-%define embedded_dependencies_option %{nil}
-%endif
-
 %configure --disable-silent-rules \
 	   --enable-gtk-doc \
 	   --disable-libarchive \
-	   --with-dracut \
-	   %{embedded_dependencies_option}
+	   --with-dracut
 make %{?_smp_mflags}
 
 %install
@@ -112,14 +74,6 @@ rm -rf $RPM_BUILD_ROOT
 %{_prefix}/lib/systemd/system/ostree*.service
 %{_prefix}/lib/dracut/modules.d/98ostree/*
 %{_libdir}/*.so.1*
-%if 0%{?enable_embedded_dependencies}
-%{_libdir}/ostree/libglib*.so*
-%{_libdir}/ostree/libgmodule*.so*
-%{_libdir}/ostree/libgobject*.so*
-%{_libdir}/ostree/libgthread*.so*
-%{_libdir}/ostree/libgio*.so*
-%{_libdir}/ostree/libsoup*.so*
-%endif
 %{_mandir}/man1/*.gz
 
 %files devel
@@ -130,6 +84,10 @@ rm -rf $RPM_BUILD_ROOT
 %{_datadir}/gtk-doc/html/ostree
 
 %changelog
+* Sat Aug 25 2013 Colin Walters <walters@verbum.org> - 2013.5-3
+- And actually while we are here, drop all the embedded dependency
+  goop from this spec file; it may live on in the EPEL branch.
+
 * Sat Aug 25 2013 Colin Walters <walters@verbum.org> - 2013.5-2
 - Drop requirement on linux-user-chroot
   We now require triggers to be processed on the build server
