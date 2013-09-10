@@ -1,7 +1,7 @@
 Summary: Linux-based operating system develop/build/deploy tool
 Name: ostree
-Version: 2013.5
-Release: 3%{?dist}
+Version: 2013.6
+Release: 1%{?dist}
 #VCS: git:git://git.gnome.org/ostree
 Source0: http://ftp.gnome.org/pub/GNOME/sources/ostree/%{version}/ostree-%{version}.tar.xz
 # The libostree.so (currently private) shared library, and almost all
@@ -84,6 +84,9 @@ rm -rf $RPM_BUILD_ROOT
 %{_datadir}/gtk-doc/html/ostree
 
 %changelog
+* Mon Sep 09 2013 Colin Walters <walters@verbum.org> - 2013.6-1
+- New upstream release
+
 * Sat Aug 25 2013 Colin Walters <walters@verbum.org> - 2013.5-3
 - And actually while we are here, drop all the embedded dependency
   goop from this spec file; it may live on in the EPEL branch.
