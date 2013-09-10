@@ -1,7 +1,7 @@
-Summary: Linux-based operating system develop/build/deploy tool
+Summary: Git for operating system binaries
 Name: ostree
 Version: 2013.6
-Release: 1%{?dist}
+Release: 2%{?dist}
 #VCS: git:git://git.gnome.org/ostree
 Source0: http://ftp.gnome.org/pub/GNOME/sources/ostree/%{version}/ostree-%{version}.tar.xz
 # The libostree.so (currently private) shared library, and almost all
@@ -30,7 +30,12 @@ BuildRequires: pkgconfig(libsoup-2.4)
 BuildRequires: pkgconfig(systemd)
 
 %description
-See http://live.gnome.org/OSTree
+OSTree is a tool for managing bootable, immutable, versioned
+filesystem trees. While it takes over some of the roles of tradtional
+"package managers" like dpkg and rpm, it is not a package system; nor
+is it a tool for managing full disk images. Instead, it sits between
+those levels, offering a blend of the advantages (and disadvantages)
+of both.
 
 %package devel
 Summary: Development headers for %{name}
@@ -84,6 +89,9 @@ rm -rf $RPM_BUILD_ROOT
 %{_datadir}/gtk-doc/html/ostree
 
 %changelog
+* Mon Sep 09 2013 Colin Walters <walters@verbum.org> - 2013.6-2
+- Tweak description
+
 * Mon Sep 09 2013 Colin Walters <walters@verbum.org> - 2013.6-1
 - New upstream release
 
