@@ -1,7 +1,7 @@
 Summary: Git for operating system binaries
 Name: ostree
 Version: 2013.6
-Release: 2%{?dist}
+Release: 3%{?dist}
 #VCS: git:git://git.gnome.org/ostree
 Source0: http://ftp.gnome.org/pub/GNOME/sources/ostree/%{version}/ostree-%{version}.tar.xz
 # The libostree.so (currently private) shared library, and almost all
@@ -14,20 +14,23 @@ Source0: http://ftp.gnome.org/pub/GNOME/sources/ostree/%{version}/ostree-%{versi
 # files for the canonical license status.
 License: LGPLv2+ and GPLv2+ and BSD
 URL: http://live.gnome.org/OSTree
+
 # We always run autogen.sh
 BuildRequires: autoconf automake libtool
 # Too bad there isn't a pkg-config file =(
 BuildRequires: libattr-devel
 # For docs
 BuildRequires: gtk-doc
-BuildRequires: dracut
-
-Requires: dracut
-Requires: systemd-units
-
+# Core requirements
 BuildRequires: pkgconfig(gio-unix-2.0)
 BuildRequires: pkgconfig(libsoup-2.4)
 BuildRequires: pkgconfig(systemd)
+BuildRequires: /usr/bin/g-ir-scanner
+BuildRequires: dracut
+
+# Runtime requirements
+Requires: dracut
+Requires: systemd-units
 
 %description
 OSTree is a tool for managing bootable, immutable, versioned
@@ -79,6 +82,7 @@ rm -rf $RPM_BUILD_ROOT
 %{_prefix}/lib/systemd/system/ostree*.service
 %{_prefix}/lib/dracut/modules.d/98ostree/*
 %{_libdir}/*.so.1*
+%{_libdir}/girepository-1.0/OSTree-1.0.typelib
 %{_mandir}/man1/*.gz
 
 %files devel
@@ -87,8 +91,12 @@ rm -rf $RPM_BUILD_ROOT
 %{_libdir}/pkgconfig/*
 %dir %{_datadir}/gtk-doc/html/ostree
 %{_datadir}/gtk-doc/html/ostree
+%{_datadir}/gir-1.0/OSTree-1.0.gir
 
 %changelog
+* Thu Sep 12 2013 Colin Walters <walters@verbum.org> - 2013.6-3
+- Enable introspection
+
 * Mon Sep 09 2013 Colin Walters <walters@verbum.org> - 2013.6-2
 - Tweak description
 
