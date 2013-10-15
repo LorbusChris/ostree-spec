@@ -1,29 +1,23 @@
 Summary: Git for operating system binaries
 Name: ostree
-Version: 2013.6
-Release: 3%{?dist}
+Version: 2013.7
+Release: 1%{?dist}
 #VCS: git:git://git.gnome.org/ostree
 Source0: http://ftp.gnome.org/pub/GNOME/sources/ostree/%{version}/ostree-%{version}.tar.xz
-# The libostree.so (currently private) shared library, and almost all
-# of the utilities are licensed under the LGPLv2+.  Only at present
-# one utility program (ostree-switch-root) is forked from util-linux under
-# the GPL.
-# The BSD is there basically just for some random scripts, nothing
-# important.
-# As always, consult the upstream COPYING file, and individual source
-# files for the canonical license status.
-License: LGPLv2+ and GPLv2+ and BSD
+License: LGPLv2+
 URL: http://live.gnome.org/OSTree
 
 # We always run autogen.sh
 BuildRequires: autoconf automake libtool
-# Too bad there isn't a pkg-config file =(
-BuildRequires: libattr-devel
 # For docs
 BuildRequires: gtk-doc
 # Core requirements
 BuildRequires: pkgconfig(gio-unix-2.0)
 BuildRequires: pkgconfig(libsoup-2.4)
+BuildRequires: libattr-devel
+# Extras
+BuildRequires: pkgconfig(libarchive)
+BuildRequires: gpgme-devel
 BuildRequires: pkgconfig(systemd)
 BuildRequires: /usr/bin/g-ir-scanner
 BuildRequires: dracut
@@ -89,11 +83,18 @@ rm -rf $RPM_BUILD_ROOT
 %{_libdir}/lib*.so
 %{_includedir}/*
 %{_libdir}/pkgconfig/*
+%{_datadir}/ostree
 %dir %{_datadir}/gtk-doc/html/ostree
 %{_datadir}/gtk-doc/html/ostree
 %{_datadir}/gir-1.0/OSTree-1.0.gir
 
 %changelog
+* Tue Oct 15 2013 Colin Walters <walters@verbum.org> - 2013.7-1
+- New upstream release
+- Now LGPLv2+ only
+- Enable libarchive since it might be useful for people
+- Enable new gpgme dependency
+
 * Thu Sep 12 2013 Colin Walters <walters@verbum.org> - 2013.6-3
 - Enable introspection
 
