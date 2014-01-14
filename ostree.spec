@@ -1,9 +1,10 @@
 Summary: Git for operating system binaries
 Name: ostree
 Version: 2013.7
-Release: 1%{?dist}
+Release: 2%{?dist}
 #VCS: git:git://git.gnome.org/ostree
 Source0: http://ftp.gnome.org/pub/GNOME/sources/ostree/%{version}/ostree-%{version}.tar.xz
+Source1: 91-ostree.preset
 License: LGPLv2+
 URL: http://live.gnome.org/OSTree
 
@@ -56,6 +57,7 @@ make %{?_smp_mflags}
 %install
 make install DESTDIR=$RPM_BUILD_ROOT INSTALL="install -p -c"
 find $RPM_BUILD_ROOT -name '*.la' -delete
+install -D -m 0644 %{SOURCE1} $RPM_BUILD_ROOT/%{_prefix}/lib/systemd/system-preset/91-ostree.preset
 
 %clean
 rm -rf $RPM_BUILD_ROOT
@@ -78,6 +80,7 @@ rm -rf $RPM_BUILD_ROOT
 %{_libdir}/*.so.1*
 %{_libdir}/girepository-1.0/OSTree-1.0.typelib
 %{_mandir}/man1/*.gz
+%{_prefix}/lib/systemd/system-preset/91-ostree.preset
 
 %files devel
 %{_libdir}/lib*.so
@@ -89,6 +92,10 @@ rm -rf $RPM_BUILD_ROOT
 %{_datadir}/gir-1.0/OSTree-1.0.gir
 
 %changelog
+* Mon Jan 13 2014 Colin Walters <walters@verbum.org> - 2013.7-2
+- Add preset file so ostree-remount is enabled by default, since
+  it needs to be.
+
 * Tue Oct 15 2013 Colin Walters <walters@verbum.org> - 2013.7-1
 - New upstream release
 - Now LGPLv2+ only
