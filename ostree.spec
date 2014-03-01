@@ -1,6 +1,6 @@
 Summary: Git for operating system binaries
 Name: ostree
-Version: 2014.1
+Version: 2014.2
 Release: 1%{?dist}
 #VCS: git:git://git.gnome.org/ostree
 Source0: http://ftp.gnome.org/pub/GNOME/sources/ostree/%{version}/ostree-%{version}.tar.xz
@@ -18,6 +18,7 @@ BuildRequires: pkgconfig(libsoup-2.4)
 BuildRequires: libattr-devel
 # Extras
 BuildRequires: pkgconfig(libarchive)
+BuildRequires: pkgconfig(libselinux)
 BuildRequires: gpgme-devel
 BuildRequires: pkgconfig(systemd)
 BuildRequires: /usr/bin/g-ir-scanner
@@ -50,7 +51,7 @@ The %{name}-devel package includes the header files for the %{name} library.
 env NOCONFIGURE=1 ./autogen.sh
 %configure --disable-silent-rules \
 	   --enable-gtk-doc \
-	   --disable-libarchive \
+	   --with-selinux \
 	   --with-dracut
 make %{?_smp_mflags}
 
@@ -92,6 +93,12 @@ rm -rf $RPM_BUILD_ROOT
 %{_datadir}/gir-1.0/OSTree-1.0.gir
 
 %changelog
+* Sat Mar 01 2014 Colin Walters <walters@verbum.org> - 2014.2-1
+- New upstream release
+- Depend on libselinux
+- Explicitly depend on libarchive too, we were actually failing
+  to disable it before
+
 * Fri Jan 24 2014 Colin Walters <walters@verbum.org> - 2014.1-1
 - New upstream release
 
