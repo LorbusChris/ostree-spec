@@ -1,7 +1,7 @@
 Summary: Git for operating system binaries
 Name: ostree
 Version: 2014.2
-Release: 2%{?dist}
+Release: 3%{?dist}
 #VCS: git:git://git.gnome.org/ostree
 Source0: http://ftp.gnome.org/pub/GNOME/sources/ostree/%{version}/ostree-%{version}.tar.xz
 Source1: 91-ostree.preset
@@ -75,6 +75,7 @@ rm -rf $RPM_BUILD_ROOT
 %{_bindir}/ostree
 %{_sbindir}/ostree-prepare-root
 %{_sbindir}/ostree-remount
+%{_datadir}/ostree/trusted.gpg.d
 %{_sysconfdir}/dracut.conf.d/ostree.conf
 %dir %{_prefix}/lib/dracut/modules.d/98ostree
 %{_prefix}/lib/systemd/system/ostree*.service
@@ -88,12 +89,14 @@ rm -rf $RPM_BUILD_ROOT
 %{_libdir}/lib*.so
 %{_includedir}/*
 %{_libdir}/pkgconfig/*
-%{_datadir}/ostree
 %dir %{_datadir}/gtk-doc/html/ostree
 %{_datadir}/gtk-doc/html/ostree
 %{_datadir}/gir-1.0/OSTree-1.0.gir
 
 %changelog
+* Fri Mar 14 2014 Colin Walters <walters@verbum.org> - 2014.2-3
+- Move trusted.gpg.d to main runtime package, where it should be
+
 * Fri Mar 07 2014 Colin Walters <walters@verbum.org> - 2014.2-2
 - Depend on gpgv2 
 - Resolves: #1073813
