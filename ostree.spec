@@ -1,7 +1,7 @@
 Summary: Git for operating system binaries
 Name: ostree
-Version: 2014.2
-Release: 3%{?dist}
+Version: 2014.3
+Release: 1%{?dist}
 #VCS: git:git://git.gnome.org/ostree
 Source0: http://ftp.gnome.org/pub/GNOME/sources/ostree/%{version}/ostree-%{version}.tar.xz
 Source1: 91-ostree.preset
@@ -94,6 +94,9 @@ rm -rf $RPM_BUILD_ROOT
 %{_datadir}/gir-1.0/OSTree-1.0.gir
 
 %changelog
+* Fri Mar 21 2014 Colin Walters <walters@verbum.org> - 2014.3-1
+- New upstream release
+
 * Fri Mar 14 2014 Colin Walters <walters@verbum.org> - 2014.2-3
 - Move trusted.gpg.d to main runtime package, where it should be
 
