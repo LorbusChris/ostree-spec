@@ -1,7 +1,7 @@
 Summary: Git for operating system binaries
 Name: ostree
 Version: 2014.4
-Release: 1%{?dist}
+Release: 2%{?dist}
 #VCS: git:git://git.gnome.org/ostree
 Source0: http://ftp.gnome.org/pub/GNOME/sources/ostree/%{version}/ostree-%{version}.tar.xz
 Source1: 91-ostree.preset
@@ -13,7 +13,7 @@ BuildRequires: autoconf automake libtool
 # For docs
 BuildRequires: gtk-doc
 # Core requirements
-BuildRequires: pkgconfig(gio-unix-2.0)
+BuildRequires: pkgconfig(libgsystem)
 BuildRequires: pkgconfig(libsoup-2.4)
 BuildRequires: libattr-devel
 # Extras
