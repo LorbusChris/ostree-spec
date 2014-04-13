@@ -1,6 +1,6 @@
 Summary: Git for operating system binaries
 Name: ostree
-Version: 2014.3.13.g913337c
+Version: 2014.4
 Release: 1%{?dist}
 #VCS: git:git://git.gnome.org/ostree
 Source0: http://ftp.gnome.org/pub/GNOME/sources/ostree/%{version}/ostree-%{version}.tar.xz
@@ -94,6 +94,9 @@ rm -rf $RPM_BUILD_ROOT
 %{_datadir}/gir-1.0/OSTree-1.0.gir
 
 %changelog
+* Sun Apr 13 2014 Colin Walters <walters@verbum.org> - 2014.4-1
+- New upstream release
+
 * Mon Mar 31 2014 Colin Walters <walters@verbum.org>
 - New git snapshot for rpm-ostree
 
