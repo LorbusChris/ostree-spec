@@ -1,7 +1,7 @@
 Summary: Git for operating system binaries
 Name: ostree
-Version: 2014.4
-Release: 3%{?dist}
+Version: 2014.5
+Release: 1%{?dist}
 #VCS: git:git://git.gnome.org/ostree
 Source0: http://ftp.gnome.org/pub/GNOME/sources/ostree/%{version}/ostree-%{version}.tar.xz
 Source1: 91-ostree.preset
@@ -18,6 +18,7 @@ BuildRequires: pkgconfig(libsoup-2.4)
 BuildRequires: libattr-devel
 # Extras
 BuildRequires: pkgconfig(libarchive)
+BuildRequires: pkgconfig(liblzma)
 BuildRequires: pkgconfig(libselinux)
 BuildRequires: gpgme-devel
 BuildRequires: pkgconfig(systemd)
@@ -94,6 +95,9 @@ rm -rf $RPM_BUILD_ROOT
 %{_datadir}/gir-1.0/OSTree-1.0.gir
 
 %changelog
+* Mon Jun 09 2014 Colin Walters <walters@verbum.org> - 2014.4-1
+- New upstream release
+
 * Sat Jun 07 2014 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 2014.4-3
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_21_Mass_Rebuild
 
