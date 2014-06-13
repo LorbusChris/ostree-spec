@@ -1,7 +1,7 @@
 Summary: Git for operating system binaries
 Name: ostree
 Version: 2014.5
-Release: 1%{?dist}
+Release: 2%{?dist}
 #VCS: git:git://git.gnome.org/ostree
 Source0: http://ftp.gnome.org/pub/GNOME/sources/ostree/%{version}/ostree-%{version}.tar.xz
 Source1: 91-ostree.preset
@@ -78,6 +78,7 @@ rm -rf $RPM_BUILD_ROOT
 %{_sbindir}/ostree-prepare-root
 %{_sbindir}/ostree-remount
 %{_datadir}/ostree/trusted.gpg.d
+%{_sysconfdir}/ostree
 %{_sysconfdir}/dracut.conf.d/ostree.conf
 %dir %{_prefix}/lib/dracut/modules.d/98ostree
 %{_prefix}/lib/systemd/system/ostree*.service
@@ -96,6 +97,9 @@ rm -rf $RPM_BUILD_ROOT
 %{_datadir}/gir-1.0/OSTree-1.0.gir
 
 %changelog
+* Fri Jun 13 2014 Colin Walters <walters@verbum.org> - 2014.4-2
+- Include /etc/ostree, even though it is empty
+
 * Mon Jun 09 2014 Colin Walters <walters@verbum.org> - 2014.4-1
 - New upstream release
 
