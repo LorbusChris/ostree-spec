@@ -1,6 +1,6 @@
 Summary: Git for operating system binaries
 Name: ostree
-Version: 2014.6
+Version: 2014.7
 Release: 1%{?dist}
 #VCS: git:git://git.gnome.org/ostree
 Source0: http://ftp.gnome.org/pub/GNOME/sources/ostree/%{version}/ostree-%{version}.tar.xz
