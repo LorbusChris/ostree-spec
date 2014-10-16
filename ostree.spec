@@ -1,6 +1,6 @@
 Summary: Git for operating system binaries
 Name: ostree
-Version: 2014.7
+Version: 2014.8
 Release: 1%{?dist}
 #VCS: git:git://git.gnome.org/ostree
 Source0: http://ftp.gnome.org/pub/GNOME/sources/ostree/%{version}/ostree-%{version}.tar.xz
@@ -46,6 +46,14 @@ Requires: %{name} = %{version}-%{release}
 
 %description devel
 The %{name}-devel package includes the header files for the %{name} library.
+
+%package grub2
+Summary: GRUB2 integration for OSTree
+Group: Development/Libraries
+Requires: grub2
+
+%description grub2
+GRUB2 integration for OSTree
 
 %prep
 %setup -q -n ostree-%{version}
@@ -96,7 +104,14 @@ rm -rf $RPM_BUILD_ROOT
 %{_datadir}/gtk-doc/html/ostree
 %{_datadir}/gir-1.0/OSTree-1.0.gir
 
+%files grub2
+%{_sysconfdir}/grub.d/*ostree
+%{_libexecdir}/ostree/grub2*
+
 %changelog
+* Thu Oct 16 2014 Colin Walters <walters@redhat.com>
+- New upstream release
+
 * Mon Sep 08 2014 Colin Walters <walters@redhat.com> - 2014.6-1
 - New upstream release
 
