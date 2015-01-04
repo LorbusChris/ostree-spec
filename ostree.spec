@@ -1,10 +1,11 @@
 Summary: Tool for managing bootable, immutable filesystem trees
 Name: ostree
 Version: 2014.13
-Release: 1%{?dist}
+Release: 2%{?dist}
 #VCS: git:git://git.gnome.org/ostree
 Source0: http://ftp.gnome.org/pub/GNOME/sources/ostree/%{version}/ostree-%{version}.tar.xz
 Source1: 91-ostree.preset
+Patch0: 0001-deploy-Actually-copy-xattrs-of-modified-config-files.patch
 License: LGPLv2+
 URL: http://live.gnome.org/OSTree
 
@@ -57,6 +58,7 @@ GRUB2 integration for OSTree
 
 %prep
 %setup -q -n ostree-%{version}
+%patch0 -p1
 
 %build
 env NOCONFIGURE=1 ./autogen.sh
@@ -109,6 +111,10 @@ rm -rf $RPM_BUILD_ROOT
 %{_libexecdir}/ostree/grub2*
 
 %changelog
+* Sun Jan 04 2015 Colin Walters <walters@redhat.com> - 2014.13-2
+- Add patch to ensure correct xattrs on modified config files
+  Fixes: #1178208
+
 * Wed Dec 17 2014 Colin Walters <walters@redhat.com> - 2014.13-1
 - New upstream release
 
