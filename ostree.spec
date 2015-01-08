@@ -5,6 +5,7 @@ Release: 1%{?dist}
 #VCS: git:git://git.gnome.org/ostree
 Source0: http://ftp.gnome.org/pub/GNOME/sources/ostree/%{version}/ostree-%{version}.tar.xz
 Source1: 91-ostree.preset
+Patch1: 0001-32-bit-fixes.patch
 License: LGPLv2+
 URL: http://live.gnome.org/OSTree
 
@@ -57,6 +58,7 @@ GRUB2 integration for OSTree
 
 %prep
 %setup -q -n ostree-%{version}
+%patch1 -p1
 
 %build
 env NOCONFIGURE=1 ./autogen.sh
