@@ -1,11 +1,10 @@
 Summary: Tool for managing bootable, immutable filesystem trees
 Name: ostree
-Version: 2015.1
+Version: 2015.2
 Release: 1%{?dist}
 #VCS: git:git://git.gnome.org/ostree
 Source0: http://ftp.gnome.org/pub/GNOME/sources/ostree/%{version}/ostree-%{version}.tar.xz
 Source1: 91-ostree.preset
-Patch1: 0001-32-bit-fixes.patch
 License: LGPLv2+
 URL: http://live.gnome.org/OSTree
 
@@ -58,7 +57,6 @@ GRUB2 integration for OSTree
 
 %prep
 %setup -q -n ostree-%{version}
-%patch1 -p1
 
 %build
 env NOCONFIGURE=1 ./autogen.sh
@@ -111,7 +109,7 @@ rm -rf $RPM_BUILD_ROOT
 %{_libexecdir}/ostree/grub2*
 
 %changelog
-* Thu Jan 08 2015 Colin Walters <walters@redhat.com> - 2015.1-1
+* Thu Jan 08 2015 Colin Walters <walters@redhat.com> - 2015.2-1
 - New upstream release
 
 * Sun Jan 04 2015 Colin Walters <walters@redhat.com> - 2014.13-2
