@@ -1,7 +1,7 @@
 Summary: Tool for managing bootable, immutable filesystem trees
 Name: ostree
-Version: 2014.13
-Release: 2%{?dist}
+Version: 2015.1
+Release: 1%{?dist}
 #VCS: git:git://git.gnome.org/ostree
 Source0: http://ftp.gnome.org/pub/GNOME/sources/ostree/%{version}/ostree-%{version}.tar.xz
 Source1: 91-ostree.preset
@@ -14,7 +14,7 @@ BuildRequires: autoconf automake libtool
 # For docs
 BuildRequires: gtk-doc
 # Core requirements
-BuildRequires: pkgconfig(libgsystem)
+BuildRequires: pkgconfig(libgsystem) >= 2015.1
 BuildRequires: pkgconfig(libsoup-2.4)
 BuildRequires: libattr-devel
 # Extras
@@ -111,6 +111,9 @@ rm -rf $RPM_BUILD_ROOT
 %{_libexecdir}/ostree/grub2*
 
 %changelog
+* Thu Jan 08 2015 Colin Walters <walters@redhat.com> - 2015.1-1
+- New upstream release
+
 * Sun Jan 04 2015 Colin Walters <walters@redhat.com> - 2014.13-2
 - Add patch to ensure correct xattrs on modified config files
   Fixes: #1178208
