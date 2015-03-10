@@ -21,6 +21,7 @@ BuildRequires: pkgconfig(libarchive)
 BuildRequires: pkgconfig(liblzma)
 BuildRequires: pkgconfig(libselinux)
 BuildRequires: pkgconfig(e2p)
+BuildRequires: libcap-devel
 BuildRequires: gpgme-devel
 BuildRequires: pkgconfig(systemd)
 BuildRequires: /usr/bin/g-ir-scanner
