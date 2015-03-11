@@ -44,7 +44,7 @@ of both.
 %package devel
 Summary: Development headers for %{name}
 Group: Development/Libraries
-Requires: %{name} = %{version}-%{release}
+Requires: %{name} = %{epoch}:%{version}-%{release}
 
 %description devel
 The %{name}-devel package includes the header files for the %{name} library.
