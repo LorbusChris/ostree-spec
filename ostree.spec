@@ -1,7 +1,7 @@
 Summary: Tool for managing bootable, immutable filesystem trees
 Name: ostree
 Version: 2015.4
-Release: 3%{?dist}
+Release: 4%{?dist}
 #VCS: git:git://git.gnome.org/ostree
 Source0: http://ftp.gnome.org/pub/GNOME/sources/ostree/%{version}/ostree-%{version}.tar.xz
 Source1: 91-ostree.preset
@@ -53,6 +53,7 @@ The %{name}-devel package includes the header files for the %{name} library.
 Summary: GRUB2 integration for OSTree
 Group: Development/Libraries
 Requires: grub2
+ExcludeArch:	s390 s390x %{arm}
 
 %description grub2
 GRUB2 integration for OSTree
@@ -111,6 +112,9 @@ rm -rf $RPM_BUILD_ROOT
 %{_libexecdir}/ostree/grub2*
 
 %changelog
+* Fri Mar 27 2015 Colin Walters <walters@redhat.com> - 2015.4-4
+- Have grub2 subpackage match ExcludeArch with grub2
+
 * Fri Mar 27 2015 Colin Walters <walters@redhat.com> - 2015.4-3
 - Handle null epoch as well; this was injected for https://github.com/cgwalters/rpmdistro-gitoverlay
 
