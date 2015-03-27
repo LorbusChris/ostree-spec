@@ -1,7 +1,7 @@
 Summary: Tool for managing bootable, immutable filesystem trees
 Name: ostree
 Version: 2015.4
-Release: 2%{?dist}
+Release: 3%{?dist}
 #VCS: git:git://git.gnome.org/ostree
 Source0: http://ftp.gnome.org/pub/GNOME/sources/ostree/%{version}/ostree-%{version}.tar.xz
 Source1: 91-ostree.preset
@@ -44,7 +44,7 @@ of both.
 %package devel
 Summary: Development headers for %{name}
 Group: Development/Libraries
-Requires: %{name} = %{epoch}:%{version}-%{release}
+Requires: %{name} =  %{?epoch:%{epoch}:}:%{version}-%{release}
 
 %description devel
 The %{name}-devel package includes the header files for the %{name} library.
@@ -111,6 +111,9 @@ rm -rf $RPM_BUILD_ROOT
 %{_libexecdir}/ostree/grub2*
 
 %changelog
+* Fri Mar 27 2015 Colin Walters <walters@redhat.com> - 2015.4-3
+- Handle null epoch as well; this was injected for https://github.com/cgwalters/rpmdistro-gitoverlay
+
 * Wed Mar 25 2015 Colin Walters <walters@redhat.com> - 2015.4-2
 - New upstream release
 
