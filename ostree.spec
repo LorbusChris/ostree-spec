@@ -1,7 +1,7 @@
 Summary: Tool for managing bootable, immutable filesystem trees
 Name: ostree
 Version: 2015.4
-Release: 4%{?dist}
+Release: 5%{?dist}
 #VCS: git:git://git.gnome.org/ostree
 Source0: http://ftp.gnome.org/pub/GNOME/sources/ostree/%{version}/ostree-%{version}.tar.xz
 Source1: 91-ostree.preset
@@ -49,14 +49,15 @@ Requires: %{name} =  %{?epoch:%{epoch}:}:%{version}-%{release}
 %description devel
 The %{name}-devel package includes the header files for the %{name} library.
 
+%ifnarch s390 s390x %{arm}
 %package grub2
 Summary: GRUB2 integration for OSTree
 Group: Development/Libraries
 Requires: grub2
-ExcludeArch:	s390 s390x %{arm}
 
 %description grub2
 GRUB2 integration for OSTree
+%endif
 
 %prep
 %setup -q -n ostree-%{version}
@@ -98,6 +99,8 @@ rm -rf $RPM_BUILD_ROOT
 %{_libdir}/girepository-1.0/OSTree-1.0.typelib
 %{_mandir}/man*/*.gz
 %{_prefix}/lib/systemd/system-preset/91-ostree.preset
+%exclude %{_sysconfdir}/grub.d/*ostree
+%exclude %{_libexecdir}/ostree/grub2*
 
 %files devel
 %{_libdir}/lib*.so
@@ -107,11 +110,16 @@ rm -rf $RPM_BUILD_ROOT
 %{_datadir}/gtk-doc/html/ostree
 %{_datadir}/gir-1.0/OSTree-1.0.gir
 
+%ifnarch s390 s390x %{arm}
 %files grub2
 %{_sysconfdir}/grub.d/*ostree
 %{_libexecdir}/ostree/grub2*
+%endif
 
 %changelog
+* Mon Mar 30 2015 Dan Horák <dan[at]danny.cz> - 2015.4-5
+- ExcludeArch is a build restriction and is global, switching to %%ifnarch
+
 * Fri Mar 27 2015 Colin Walters <walters@redhat.com> - 2015.4-4
 - Have grub2 subpackage match ExcludeArch with grub2
 
