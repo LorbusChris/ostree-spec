@@ -1,7 +1,7 @@
 Summary: Tool for managing bootable, immutable filesystem trees
 Name: ostree
-Version: 2015.4
-Release: 5%{?dist}
+Version: 2015.5
+Release: 2%{?dist}
 #VCS: git:git://git.gnome.org/ostree
 Source0: http://ftp.gnome.org/pub/GNOME/sources/ostree/%{version}/ostree-%{version}.tar.xz
 Source1: 91-ostree.preset
@@ -117,6 +117,9 @@ rm -rf $RPM_BUILD_ROOT
 %endif
 
 %changelog
+* Tue Apr 07 2015 Colin Walters <walters@redhat.com> - 2015.5-2
+- New upstream release
+
 * Mon Mar 30 2015 Dan Horák <dan[at]danny.cz> - 2015.4-5
 - ExcludeArch is a build restriction and is global, switching to %%ifnarch
 
