@@ -1,0 +1,27 @@
+From f08cb802ea1b02c874fd71a0672c28b49e890d49 Mon Sep 17 00:00:00 2001
+From: Colin Walters <walters@verbum.org>
+Date: Sun, 19 Apr 2015 15:25:05 -0400
+Subject: [PATCH] sysroot: Close sysroot fd in finalize
+
+Just noticed this while I was going to add another one there.
+---
+ src/libostree/ostree-sysroot.c | 3 +++
+ 1 file changed, 3 insertions(+)
+
+diff --git a/src/libostree/ostree-sysroot.c b/src/libostree/ostree-sysroot.c
+index b18c6b7..6255803 100644
+--- a/src/libostree/ostree-sysroot.c
++++ b/src/libostree/ostree-sysroot.c
+@@ -66,6 +66,9 @@ ostree_sysroot_finalize (GObject *object)
+   g_clear_object (&self->sepolicy);
+   g_clear_object (&self->repo);
+ 
++  if (self->sysroot_fd != -1)
++    (void) close (self->sysroot_fd);
++
+   G_OBJECT_CLASS (ostree_sysroot_parent_class)->finalize (object);
+ }
+ 
+-- 
+1.8.3.1
+

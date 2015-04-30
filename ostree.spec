@@ -1,13 +1,15 @@
 Summary: Tool for managing bootable, immutable filesystem trees
 Name: ostree
 Version: 2015.6
-Release: 2%{?dist}
+Release: 3%{?dist}
 #VCS: git:git://git.gnome.org/ostree
 Source0: http://ftp.gnome.org/pub/GNOME/sources/ostree/%{version}/ostree-%{version}.tar.xz
 Source1: 91-ostree.preset
+Patch0: 0001-sysroot-Close-sysroot-fd-in-finalize.patch
 License: LGPLv2+
 URL: http://live.gnome.org/OSTree
 
+BuildRequires: git
 # We always run autogen.sh
 BuildRequires: autoconf automake libtool
 # For docs
@@ -60,7 +62,7 @@ GRUB2 integration for OSTree
 %endif
 
 %prep
-%setup -q -n ostree-%{version}
+%autosetup -Sgit -n ostree-%{version}
 
 %build
 env NOCONFIGURE=1 ./autogen.sh
@@ -117,6 +119,10 @@ rm -rf $RPM_BUILD_ROOT
 %endif
 
 %changelog
+* Thu Apr 30 2015 Colin Walters <walters@redhat.com> - 2015.6-3
+- Close sysroot fd in finalize to fix Anaconda
+  https://bugzilla.redhat.com/show_bug.cgi?id=1217578
+
 * Fri Apr 17 2015 Colin Walters <walters@redhat.com> - 2015.6-2
 - New upstream release
 
