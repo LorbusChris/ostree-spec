@@ -1,11 +1,12 @@
 Summary: Tool for managing bootable, immutable filesystem trees
 Name: ostree
 Version: 2015.6
-Release: 3%{?dist}
+Release: 4%{?dist}
 #VCS: git:git://git.gnome.org/ostree
 Source0: http://ftp.gnome.org/pub/GNOME/sources/ostree/%{version}/ostree-%{version}.tar.xz
 Source1: 91-ostree.preset
 Patch0: 0001-sysroot-Close-sysroot-fd-in-finalize.patch
+Patch1: PR116.patch
 License: LGPLv2+
 URL: http://live.gnome.org/OSTree
 
@@ -119,6 +120,10 @@ rm -rf $RPM_BUILD_ROOT
 %endif
 
 %changelog
+* Thu May 28 2015 Colin Walters <walters@redhat.com> - 2015.6-4
+- Add patch to ensure reliable bootloader ordering
+  See: #1225088
+
 * Thu Apr 30 2015 Colin Walters <walters@redhat.com> - 2015.6-3
 - Close sysroot fd in finalize to fix Anaconda
   https://bugzilla.redhat.com/show_bug.cgi?id=1217578
