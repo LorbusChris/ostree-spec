@@ -1,7 +1,7 @@
 Summary: Tool for managing bootable, immutable filesystem trees
 Name: ostree
 Version: 2015.9
-Release: 1%{?dist}
+Release: 2%{?dist}
 #VCS: git:git://git.gnome.org/ostree
 Source0: http://ftp.gnome.org/pub/GNOME/sources/ostree/%{version}/ostree-%{version}.tar.xz
 Source1: 91-ostree.preset
@@ -33,6 +33,8 @@ Requires: libgsystem >= 2015.1
 Requires: dracut
 Requires: /usr/bin/gpgv2
 Requires: systemd-units
+
+Patch1: 0001-init-fs-Explicitly-set-tmp-to-01777.patch
 
 %description
 OSTree is a tool for managing bootable, immutable, versioned
@@ -118,6 +120,10 @@ rm -rf $RPM_BUILD_ROOT
 %endif
 
 %changelog
+* Fri Oct 30 2015 Colin Walters <walters@redhat.com> - 2015.9-2
+- Add patch to fix permissions of /tmp
+  Resolves: #1276775
+
 * Wed Sep 23 2015 Colin Walters <walters@redhat.com> - 2015.9-1
 - New upstream version
 
