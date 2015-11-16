@@ -35,6 +35,7 @@ Requires: /usr/bin/gpgv2
 Requires: systemd-units
 
 Patch1: 0001-init-fs-Explicitly-set-tmp-to-01777.patch
+Patch2: 0001-ostree-remount-Explicitly-set-tmp-to-01777.patch
 
 %description
 OSTree is a tool for managing bootable, immutable, versioned
@@ -120,6 +121,10 @@ rm -rf $RPM_BUILD_ROOT
 %endif
 
 %changelog
+* Thu Nov 12 2015 Matthew Barnes <mbarnes@redhat.com> - 2015.9-3
+- Add ostree-tmp-chmod.service to fix /tmp permissions on existing installs.
+  Resolves: #1276775
+
 * Fri Oct 30 2015 Colin Walters <walters@redhat.com> - 2015.9-2
 - Add patch to fix permissions of /tmp
   Resolves: #1276775

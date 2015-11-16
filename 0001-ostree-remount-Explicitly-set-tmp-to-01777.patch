@@ -1,0 +1,31 @@
+From e7ef7ccc9540f493fe99037f3592f8b956d5edc6 Mon Sep 17 00:00:00 2001
+From: Matthew Barnes <mbarnes@redhat.com>
+Date: Fri, 13 Nov 2015 09:54:52 -0500
+Subject: [PATCH] [PATCH] ostree-remount: Explicitly set /tmp to 01777
+
+See https://bugzilla.redhat.com/show_bug.cgi?id=1276775
+---
+ src/switchroot/ostree-remount.c | 8 ++++++++
+ 1 file changed, 8 insertions(+)
+
+diff --git a/src/switchroot/ostree-remount.c b/src/switchroot/ostree-remount.c
+index b8d3a96..9dff2a0 100644
+--- a/src/switchroot/ostree-remount.c
++++ b/src/switchroot/ostree-remount.c
+@@ -117,5 +117,13 @@ main(int argc, char *argv[])
+ 
+   maybe_mount_tmpfs_on_var ();
+ 
++  /* Ensure /sysroot/tmp is world-writable.  Works around a bug
++   * where init-fs left the directory writable only to root. */
++  if (chmod ("/sysroot/tmp", 01777) == -1)
++    {
++      perror ("failed to chmod /sysroot/tmp");
++      exit (EXIT_FAILURE);
++    }
++
+   exit (EXIT_SUCCESS);
+ }
+-- 
+2.5.0
+
