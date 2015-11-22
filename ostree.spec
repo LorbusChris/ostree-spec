@@ -1,7 +1,7 @@
 Summary: Tool for managing bootable, immutable filesystem trees
 Name: ostree
-Version: 2015.9
-Release: 4%{?dist}
+Version: 2015.10
+Release: 1%{?dist}
 #VCS: git:git://git.gnome.org/ostree
 Source0: http://ftp.gnome.org/pub/GNOME/sources/ostree/%{version}/ostree-%{version}.tar.xz
 Source1: 91-ostree.preset
@@ -120,7 +120,7 @@ rm -rf $RPM_BUILD_ROOT
 %endif
 
 %changelog
-* Sun Nov 22 2015 Colin Walters <walters@redhat.com> - 2015.9-4
+* Sun Nov 22 2015 Colin Walters <walters@redhat.com> - 2015.10-1
 - New upstream version
 
 * Thu Nov 12 2015 Matthew Barnes <mbarnes@redhat.com> - 2015.9-3
