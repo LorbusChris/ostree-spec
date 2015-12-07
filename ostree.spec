@@ -27,6 +27,7 @@ BuildRequires: gpgme-devel
 BuildRequires: pkgconfig(systemd)
 BuildRequires: /usr/bin/g-ir-scanner
 BuildRequires: dracut
+BuildRequires:  bison
 
 # Runtime requirements
 Requires: libgsystem >= 2015.1
