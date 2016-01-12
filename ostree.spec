@@ -1,6 +1,6 @@
 Summary: Tool for managing bootable, immutable filesystem trees
 Name: ostree
-Version: 2015.11
+Version: 2016.1
 Release: 2%{?dist}
 #VCS: git:git://git.gnome.org/ostree
 Source0: http://ftp.gnome.org/pub/GNOME/sources/ostree/%{version}/ostree-%{version}.tar.xz
@@ -121,6 +121,9 @@ rm -rf $RPM_BUILD_ROOT
 %endif
 
 %changelog
+* Tue Jan 12 2016 Colin Walters <walters@redhat.com> - 2016.1-2
+- New upstream version
+
 * Fri Dec 04 2015 Colin Walters <walters@redhat.com> - 2015.11-2
 - New upstream version
 
