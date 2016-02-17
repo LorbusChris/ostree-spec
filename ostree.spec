@@ -21,6 +21,7 @@ BuildRequires: libattr-devel
 BuildRequires: pkgconfig(libarchive)
 BuildRequires: pkgconfig(liblzma)
 BuildRequires: pkgconfig(libselinux)
+BuildRequires: pkgconfig(fuse)
 BuildRequires: pkgconfig(e2p)
 BuildRequires: libcap-devel
 BuildRequires: gpgme-devel
@@ -91,6 +92,7 @@ rm -rf $RPM_BUILD_ROOT
 %files
 %doc COPYING README.md
 %{_bindir}/ostree
+%{_bindir}/rofiles-fuse
 %{_sbindir}/ostree-prepare-root
 %{_sbindir}/ostree-remount
 %{_datadir}/ostree/trusted.gpg.d
