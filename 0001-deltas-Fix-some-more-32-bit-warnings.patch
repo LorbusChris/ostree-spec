@@ -1,0 +1,31 @@
+From ed7266b10ad75252b7d8026a4329d913a8ada8c1 Mon Sep 17 00:00:00 2001
+From: Colin Walters <walters@verbum.org>
+Date: Mon, 22 Feb 2016 22:07:02 -0500
+Subject: [PATCH] deltas: Fix some more 32 bit warnings
+
+---
+ src/libostree/ostree-repo-static-delta-core.c | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
+
+diff --git a/src/libostree/ostree-repo-static-delta-core.c b/src/libostree/ostree-repo-static-delta-core.c
+index 6369f34..eb6de3b 100644
+--- a/src/libostree/ostree-repo-static-delta-core.c
++++ b/src/libostree/ostree-repo-static-delta-core.c
+@@ -640,10 +640,10 @@ show_one_part (OstreeRepo                    *self,
+              " opsize=%" G_GUINT64_FORMAT
+              "\n",
+              i,
+-             g_variant_n_children (modes),
+-             g_variant_n_children (xattrs),
+-             g_variant_n_children (blob),
+-             g_variant_n_children (ops));
++             (guint64)g_variant_n_children (modes),
++             (guint64)g_variant_n_children (xattrs),
++             (guint64)g_variant_n_children (blob),
++             (guint64)g_variant_n_children (ops));
+ 
+     if (!_ostree_static_delta_part_execute (self, objects,
+                                             part, TRUE, TRUE,
+-- 
+1.8.3.1
+
