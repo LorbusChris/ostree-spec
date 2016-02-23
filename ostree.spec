@@ -37,6 +37,7 @@ Requires: /usr/bin/gpgv2
 Requires: systemd-units
 
 Patch2: 0001-ostree-remount-Explicitly-set-tmp-to-01777.patch
+Patch3: 0001-libarchive-Fix-a-32-bit-format-warning.patch
 
 %description
 OSTree is a tool for managing bootable, immutable, versioned

@@ -1,0 +1,26 @@
+From 88ae6f1b9e64926c47e5c1dae36027b8c46816f7 Mon Sep 17 00:00:00 2001
+From: Colin Walters <walters@verbum.org>
+Date: Mon, 22 Feb 2016 20:52:33 -0500
+Subject: [PATCH] libarchive: Fix a 32 bit format warning
+
+This is actually an error by default with our default CFLAGS.
+---
+ src/libostree/ostree-repo-libarchive.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/src/libostree/ostree-repo-libarchive.c b/src/libostree/ostree-repo-libarchive.c
+index 82c8dd5..b21e222 100644
+--- a/src/libostree/ostree-repo-libarchive.c
++++ b/src/libostree/ostree-repo-libarchive.c
+@@ -640,7 +640,7 @@ write_directory_to_libarchive_recurse (OstreeRepo               *self,
+                   if (r != bytes_read)
+                     {
+                       propagate_libarchive_error (error, a);
+-                      g_prefix_error (error, "Failed to write %" G_GUINT64_FORMAT " bytes (code %" G_GUINT64_FORMAT"): ", bytes_read, r);
++                      g_prefix_error (error, "Failed to write %" G_GUINT64_FORMAT " bytes (code %" G_GUINT64_FORMAT"): ", (guint64)bytes_read, r);
+                       goto out;
+                     }
+                 }
+-- 
+1.8.3.1
+
