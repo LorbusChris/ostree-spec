@@ -39,6 +39,7 @@ Requires: systemd-units
 Patch2: 0001-ostree-remount-Explicitly-set-tmp-to-01777.patch
 Patch3: 0001-libarchive-Fix-a-32-bit-format-warning.patch
 Patch4: 0001-lib-Two-more-compiler-warning-fixes.patch
+Patch5: 0001-deltas-Fix-some-more-32-bit-warnings.patch
 
 %description
 OSTree is a tool for managing bootable, immutable, versioned
