@@ -1,7 +1,7 @@
 Summary: Tool for managing bootable, immutable filesystem trees
 Name: ostree
 Version: 2016.5
-Release: 2%{?dist}
+Release: 3%{?dist}
 #VCS: git:git://git.gnome.org/ostree
 Source0: http://ftp.gnome.org/pub/GNOME/sources/ostree/%{version}/ostree-%{version}.tar.xz
 Source1: 91-ostree.preset
@@ -58,7 +58,11 @@ The %{name}-devel package includes the header files for the %{name} library.
 %package grub2
 Summary: GRUB2 integration for OSTree
 Group: Development/Libraries
+%ifnarch aarch64
 Requires: grub2
+%else
+Requires: grub2-efi
+%endif
 
 %description grub2
 GRUB2 integration for OSTree
@@ -80,8 +84,6 @@ make install DESTDIR=$RPM_BUILD_ROOT INSTALL="install -p -c"
 find $RPM_BUILD_ROOT -name '*.la' -delete
 install -D -m 0644 %{SOURCE1} $RPM_BUILD_ROOT/%{_prefix}/lib/systemd/system-preset/91-ostree.preset
 
-%clean
-rm -rf $RPM_BUILD_ROOT
 
 %post
 %systemd_post ostree-remount.service
@@ -90,7 +92,9 @@ rm -rf $RPM_BUILD_ROOT
 %systemd_preun ostree-remount.service
 
 %files
-%doc COPYING README.md
+%{!?_licensedir:%global license %%doc}
+%license COPYING
+%doc README.md
 %{_bindir}/ostree
 %{_bindir}/rofiles-fuse
 %{_sbindir}/ostree-prepare-root
@@ -123,6 +127,10 @@ rm -rf $RPM_BUILD_ROOT
 %endif
 
 %changelog
+* Sun May  8 2016 Peter Robinson <pbrobinson@fedoraproject.org> 2016.5-3
+- aarch64 only has grub2-efi
+- Use %%license
+
 * Fri Apr 15 2016 Colin Walters <walters@redhat.com> - 2016.5-2
 - New upstream version
 
