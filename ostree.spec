@@ -1,7 +1,7 @@
 Summary: Tool for managing bootable, immutable filesystem trees
 Name: ostree
-Version: 2016.5
-Release: 3%{?dist}
+Version: 2016.6
+Release: 1%{?dist}
 #VCS: git:git://git.gnome.org/ostree
 Source0: http://ftp.gnome.org/pub/GNOME/sources/ostree/%{version}/ostree-%{version}.tar.xz
 Source1: 91-ostree.preset
@@ -127,6 +127,9 @@ install -D -m 0644 %{SOURCE1} $RPM_BUILD_ROOT/%{_prefix}/lib/systemd/system-pres
 %endif
 
 %changelog
+* Mon Jun 20 2016 Colin Walters <walters@redhat.com> - 2016.6-1
+- New upstream version
+
 * Sun May  8 2016 Peter Robinson <pbrobinson@fedoraproject.org> 2016.5-3
 - aarch64 only has grub2-efi
 - Use %%license
