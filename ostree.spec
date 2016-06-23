@@ -25,7 +25,7 @@ BuildRequires: pkgconfig(fuse)
 BuildRequires: pkgconfig(e2p)
 BuildRequires: libcap-devel
 BuildRequires: gpgme-devel
-BuildRequires: pkgconfig(systemd)
+BuildRequires: pkgconfig(libsystemd)
 BuildRequires: /usr/bin/g-ir-scanner
 BuildRequires: dracut
 BuildRequires:  bison
