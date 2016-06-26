@@ -3,7 +3,7 @@ Name: ostree
 Version: 2016.6
 Release: 1%{?dist}
 #VCS: git:git://git.gnome.org/ostree
-Source0: http://ftp.gnome.org/pub/GNOME/sources/ostree/%{version}/ostree-%{version}.tar.xz
+Source0: https://github.com/ostreedev/%{name}/releases/download/v%{version}/%{name}-%{version}.tar.xz
 Source1: 91-ostree.preset
 License: LGPLv2+
 URL: http://live.gnome.org/OSTree
