@@ -1,7 +1,7 @@
 Summary: Tool for managing bootable, immutable filesystem trees
 Name: ostree
-Version: 2016.7
-Release: 4%{?dist}
+Version: 2016.8
+Release: 1%{?dist}
 #VCS: git:git://git.gnome.org/ostree
 Source0: https://github.com/ostreedev/%{name}/releases/download/v%{version}/%{name}-%{version}.tar.xz
 Source1: 91-ostree.preset
@@ -9,7 +9,6 @@ License: LGPLv2+
 URL: http://live.gnome.org/OSTree
 
 Patch2: 0001-ostree-remount-Explicitly-set-tmp-to-01777.patch
-Patch3: 0001-prune-Retain-the-tip-of-each-ref-even-with-date-prun.patch
 
 BuildRequires: git
 # We always run autogen.sh
@@ -128,6 +127,9 @@ install -D -m 0644 %{SOURCE1} $RPM_BUILD_ROOT/%{_prefix}/lib/systemd/system-pres
 %endif
 
 %changelog
+* Tue Aug 09 2016 walters@redhat.com - 2016.8-1
+- New upstream version
+
 * Tue Aug 09 2016 Colin Walters <walters@verbum.org> - 2016.7-4
 - Add pending patch to fix date-based pruning
 
