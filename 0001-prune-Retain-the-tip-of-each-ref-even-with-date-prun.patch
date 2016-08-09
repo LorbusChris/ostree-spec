@@ -1,0 +1,107 @@
+From 1ec166ee597641ef612b281b85f61a78b318b89b Mon Sep 17 00:00:00 2001
+From: Colin Walters <walters@verbum.org>
+Date: Mon, 8 Aug 2016 15:41:09 -0400
+Subject: [PATCH] prune: Retain the tip of each ref even with date pruning
+
+I hit an error with [CAHC](https://wiki.centos.org/SpecialInterestGroup/Atomic/Devel)
+where we were doing time-based pruning.  `ostree summary -u` started failing,
+and it took me a bit to realize it was because we were pruning
+even the tip of old branches, which I was not at all expecting,
+and I don't think users will too.
+
+Perhaps in the future we could add some sort of --prune-ref-tips or
+something if people wanted it, but I doubt it.
+---
+ src/ostree/ot-builtin-prune.c | 20 ++++++++++++++++++++
+ tests/test-prune.sh           | 16 +++++++++++-----
+ 2 files changed, 31 insertions(+), 5 deletions(-)
+
+diff --git a/src/ostree/ot-builtin-prune.c b/src/ostree/ot-builtin-prune.c
+index 0b843c9..b17e83b 100644
+--- a/src/ostree/ot-builtin-prune.c
++++ b/src/ostree/ot-builtin-prune.c
+@@ -84,6 +84,8 @@ delete_commit (OstreeRepo *repo, const char *commit_to_delete, GCancellable *can
+ static gboolean
+ prune_commits_keep_younger_than_date (OstreeRepo *repo, const char *date, GCancellable *cancellable, GError **error)
+ {
++  g_autoptr(GHashTable) refs = NULL;
++  g_autoptr(GHashTable) ref_heads = g_hash_table_new (g_str_hash, g_str_equal);
+   g_autoptr(GHashTable) objects = NULL;
+   GHashTableIter hash_iter;
+   gpointer key, value;
+@@ -100,6 +102,21 @@ prune_commits_keep_younger_than_date (OstreeRepo *repo, const char *date, GCance
+   if (!ot_enable_tombstone_commits (repo, error))
+     goto out;
+ 
++  if (!ostree_repo_list_refs (repo, NULL, &refs, cancellable, error))
++    goto out;
++
++  /* We used to prune the HEAD of a given ref by default, but that's
++   * broken for for a few reasons.  One is that people may use branches as
++   * tags.  Second is that if we do it, we should be deleting the ref
++   * too, otherwise e.g. `summary -u` breaks trying to load it, etc.
++   */
++  g_hash_table_iter_init (&hash_iter, refs);
++  while (g_hash_table_iter_next (&hash_iter, &key, &value))
++    {
++      /* Value is lifecycle bound to refs */
++      g_hash_table_add (ref_heads, (char*)value);
++    }
++
+   if (!ostree_repo_list_objects (repo, OSTREE_REPO_LIST_OBJECTS_ALL, &objects,
+                                  cancellable, error))
+     goto out;
+@@ -119,6 +136,9 @@ prune_commits_keep_younger_than_date (OstreeRepo *repo, const char *date, GCance
+       if (objtype != OSTREE_OBJECT_TYPE_COMMIT)
+         continue;
+ 
++      if (g_hash_table_contains (ref_heads, checksum))
++        continue;
++
+       if (!ostree_repo_load_variant (repo, OSTREE_OBJECT_TYPE_COMMIT, checksum,
+                                      &commit, error))
+         goto out;
+diff --git a/tests/test-prune.sh b/tests/test-prune.sh
+index d32edbc..5134d56 100755
+--- a/tests/test-prune.sh
++++ b/tests/test-prune.sh
+@@ -87,25 +87,31 @@ assert_file_has_content tombstonecommitcount "^1$"
+ ${CMD_PREFIX} ostree prune --repo=repo --refs-only --depth=0 -v
+ find repo/objects -name '*.commit' | wc -l > commitcount
+ assert_file_has_content commitcount "^1$"
+-${CMD_PREFIX} ostree --repo=repo commit --branch=test -m test -s test tree --timestamp="2010-10-29 12:43:29 +0000"
+ ${CMD_PREFIX} ostree --repo=repo commit --branch=test -m test -s test tree --timestamp="2005-10-29 12:43:29 +0000"
++${CMD_PREFIX} ostree --repo=repo commit --branch=test -m test -s test tree --timestamp="2010-10-29 12:43:29 +0000"
+ find repo/objects -name '*.commit' | wc -l > commitcount
+ assert_file_has_content commitcount "^3$"
+ ${CMD_PREFIX} ostree --repo=repo prune --keep-younger-than="2015-10-29 12:43:29 +0000"
+ find repo/objects -name '*.commit' | wc -l > commitcount
+-assert_file_has_content commitcount "^1$"
++assert_file_has_content commitcount "^2$"
+ 
+ 
+ ${CMD_PREFIX} ostree prune --repo=repo --refs-only --depth=0 -v
+ find repo/objects -name '*.commit' | wc -l > commitcount
+-assert_file_has_content commitcount "^1$"
++assert_file_has_content commitcount "^2$"
+ ${CMD_PREFIX} ostree --repo=repo commit --branch=test -m test -s test tree --timestamp="October 25 1985"
+ ${CMD_PREFIX} ostree --repo=repo commit --branch=test -m test -s test tree --timestamp="October 21 2015"
+ find repo/objects -name '*.commit' | wc -l > commitcount
+-assert_file_has_content commitcount "^3$"
++assert_file_has_content commitcount "^4$"
+ ${CMD_PREFIX} ostree --repo=repo prune --keep-younger-than="1 week ago"
+ find repo/objects -name '*.commit' | wc -l > commitcount
+-assert_file_has_content commitcount "^1$"
++assert_file_has_content commitcount "^2$"
++
++${CMD_PREFIX} ostree --repo=repo commit --branch=oldcommit tree --timestamp="2005-10-29 12:43:29 +0000"
++oldcommit_rev=$($OSTREE --repo=repo rev-parse oldcommit)
++$OSTREE ls ${oldcommit_rev}
++${CMD_PREFIX} ostree --repo=repo prune --keep-younger-than="1 week ago"
++$OSTREE ls ${oldcommit_rev}
+ 
+ ${CMD_PREFIX} ostree --repo=repo pull --depth=-1 origin test
+ ${CMD_PREFIX} ostree --repo=repo commit --branch=test -m test -s test tree --timestamp="November 05 1955"
+-- 
+2.7.4
+

@@ -1,0 +1,178 @@
+From 0d07c7ecdee251bb821ddebd4f8555bdcfd1d089 Mon Sep 17 00:00:00 2001
+From: Colin Walters <walters@verbum.org>
+Date: Fri, 1 Jul 2016 14:39:49 -0400
+Subject: [PATCH] delta: Add --if-not-exists option
+
+I often want to have "idempotent" systems that iterate to a known
+state.  If after generating a commit, the system is interrupted, I'd
+like the next run to still generate a delta.  But we don't want to
+regenerate if one exists, hence this option.
+
+Closes: #375
+Approved by: jlebon
+---
+ src/libostree/ostree-cmdprivate.c                |  1 +
+ src/libostree/ostree-cmdprivate.h                |  1 +
+ src/libostree/ostree-repo-static-delta-core.c    | 33 ++++++++++++++++++++++++
+ src/libostree/ostree-repo-static-delta-private.h |  7 +++++
+ src/ostree/ot-builtin-static-delta.c             | 16 ++++++++++++
+ tests/test-delta.sh                              |  9 ++++++-
+ 6 files changed, 66 insertions(+), 1 deletion(-)
+
+diff --git a/src/libostree/ostree-cmdprivate.c b/src/libostree/ostree-cmdprivate.c
+index 2c85bb4..4367b49 100644
+--- a/src/libostree/ostree-cmdprivate.c
++++ b/src/libostree/ostree-cmdprivate.c
+@@ -47,6 +47,7 @@ ostree_cmd__private__ (void)
+   static OstreeCmdPrivateVTable table = {
+     impl_ostree_generate_grub2_config,
+     _ostree_repo_static_delta_dump,
++    _ostree_repo_static_delta_query_exists,
+     _ostree_repo_static_delta_delete
+   };
+ 
+diff --git a/src/libostree/ostree-cmdprivate.h b/src/libostree/ostree-cmdprivate.h
+index 9a74ead..8d1c653 100644
+--- a/src/libostree/ostree-cmdprivate.h
++++ b/src/libostree/ostree-cmdprivate.h
+@@ -27,6 +27,7 @@ G_BEGIN_DECLS
+ typedef struct {
+   gboolean (* ostree_generate_grub2_config) (OstreeSysroot *sysroot, int bootversion, int target_fd, GCancellable *cancellable, GError **error);
+   gboolean (* ostree_static_delta_dump) (OstreeRepo *repo, const char *delta_id, GCancellable *cancellable, GError **error);
++  gboolean (* ostree_static_delta_query_exists) (OstreeRepo *repo, const char *delta_id, gboolean *out_exists, GCancellable *cancellable, GError **error);
+   gboolean (* ostree_static_delta_delete) (OstreeRepo *repo, const char *delta_id, GCancellable *cancellable, GError **error);
+ } OstreeCmdPrivateVTable;
+ 
+diff --git a/src/libostree/ostree-repo-static-delta-core.c b/src/libostree/ostree-repo-static-delta-core.c
+index 6253a45..b730c40 100644
+--- a/src/libostree/ostree-repo-static-delta-core.c
++++ b/src/libostree/ostree-repo-static-delta-core.c
+@@ -820,6 +820,39 @@ _ostree_repo_static_delta_delete (OstreeRepo                    *self,
+ }
+ 
+ gboolean
++_ostree_repo_static_delta_query_exists (OstreeRepo                    *self,
++                                        const char                    *delta_id,
++                                        gboolean                      *out_exists,
++                                        GCancellable                  *cancellable,
++                                        GError                      **error)
++{
++  gboolean ret = FALSE;
++  g_autofree char *from = NULL; 
++  g_autofree char *to = NULL;
++  g_autofree char *superblock_path = NULL;
++  struct stat stbuf;
++
++  _ostree_parse_delta_name (delta_id, &from, &to);
++  superblock_path = _ostree_get_relative_static_delta_superblock_path (from, to);
++
++  if (fstatat (self->repo_dir_fd, superblock_path, &stbuf, 0) < 0)
++    {
++      if (errno == ENOENT)
++        {
++          *out_exists = FALSE;
++          return TRUE;
++        }
++      else
++        {
++          glnx_set_error_from_errno (error);
++          return FALSE;
++        }
++    }
++  *out_exists = TRUE;
++  return TRUE;
++}
++
++gboolean
+ _ostree_repo_static_delta_dump (OstreeRepo                    *self,
+                                 const char                    *delta_id,
+                                 GCancellable                  *cancellable,
+diff --git a/src/libostree/ostree-repo-static-delta-private.h b/src/libostree/ostree-repo-static-delta-private.h
+index eeb99c3..31e8971 100644
+--- a/src/libostree/ostree-repo-static-delta-private.h
++++ b/src/libostree/ostree-repo-static-delta-private.h
+@@ -191,6 +191,13 @@ _ostree_delta_compute_similar_objects (OstreeRepo                 *repo,
+                                        GError                    **error);
+ 
+ gboolean
++_ostree_repo_static_delta_query_exists (OstreeRepo                 *repo,
++                                        const char                 *delta_id,
++                                        gboolean                   *out_exists,
++                                        GCancellable               *cancellable,
++                                        GError                    **error);
++
++gboolean
+ _ostree_repo_static_delta_dump (OstreeRepo                 *repo,
+                                 const char                 *delta_id,
+                                 GCancellable               *cancellable,
+diff --git a/src/ostree/ot-builtin-static-delta.c b/src/ostree/ot-builtin-static-delta.c
+index 09eb90a..90702c5 100644
+--- a/src/ostree/ot-builtin-static-delta.c
++++ b/src/ostree/ot-builtin-static-delta.c
+@@ -37,6 +37,7 @@ static gboolean opt_empty;
+ static gboolean opt_swap_endianness;
+ static gboolean opt_inline;
+ static gboolean opt_disable_bsdiff;
++static gboolean opt_if_not_exists;
+ 
+ #define BUILTINPROTO(name) static gboolean ot_static_delta_builtin_ ## name (int argc, char **argv, GCancellable *cancellable, GError **error)
+ 
+@@ -64,6 +65,7 @@ static GOptionEntry generate_options[] = {
+   { "inline", 0, 0, G_OPTION_ARG_NONE, &opt_inline, "Inline delta parts into main delta", NULL },
+   { "to", 0, 0, G_OPTION_ARG_STRING, &opt_to_rev, "Create delta to revision REV", "REV" },
+   { "disable-bsdiff", 0, 0, G_OPTION_ARG_NONE, &opt_disable_bsdiff, "Disable use of bsdiff", NULL },
++  { "if-not-exists", 'n', 0, G_OPTION_ARG_NONE, &opt_if_not_exists, "Only generate if a delta does not already exist", NULL },
+   { "set-endianness", 0, 0, G_OPTION_ARG_STRING, &opt_endianness, "Choose metadata endianness ('l' or 'B')", "ENDIAN" },
+   { "swap-endianness", 0, 0, G_OPTION_ARG_NONE, &opt_swap_endianness, "Swap metadata endianness from host order", NULL },
+   { "min-fallback-size", 0, 0, G_OPTION_ARG_STRING, &opt_min_fallback_size, "Minimum uncompressed size in megabytes for individual HTTP request", NULL},
+@@ -264,6 +266,20 @@ ot_static_delta_builtin_generate (int argc, char **argv, GCancellable *cancellab
+         }
+       if (!ostree_repo_resolve_rev (repo, opt_to_rev, FALSE, &to_resolved, error))
+         goto out;
++
++      if (opt_if_not_exists)
++        {
++          gboolean does_exist;
++          g_autofree char *delta_id = from_resolved ? g_strconcat (from_resolved, "-", to_resolved, NULL) : g_strdup (to_resolved);
++          if (!ostree_cmd__private__ ()->ostree_static_delta_query_exists (repo, delta_id, &does_exist, cancellable, error))
++            goto out;
++          if (does_exist)
++            {
++              g_print ("Delta %s already exists.\n", delta_id);
++              ret = TRUE;
++              goto out;
++            }
++        }
+       
+       if (opt_endianness)
+         {
+diff --git a/tests/test-delta.sh b/tests/test-delta.sh
+index 4b2b879..bd735c4 100755
+--- a/tests/test-delta.sh
++++ b/tests/test-delta.sh
+@@ -82,6 +82,8 @@ get_assert_one_direntry_matching() {
+ origrev=$(${CMD_PREFIX} ostree --repo=repo rev-parse test)
+ 
+ ${CMD_PREFIX} ostree --repo=repo static-delta generate --empty --to=${origrev}
++${CMD_PREFIX} ostree --repo=repo static-delta generate --if-not-exists --empty --to=${origrev} > out.txt
++assert_file_has_content out.txt "${origrev} already exists"
+ ${CMD_PREFIX} ostree --repo=repo static-delta list | grep ${origrev} || exit 1
+ ${CMD_PREFIX} ostree --repo=repo prune
+ ${CMD_PREFIX} ostree --repo=repo static-delta list | grep ${origrev} || exit 1
+@@ -91,7 +93,12 @@ ${CMD_PREFIX} ostree --repo=repo commit -b test -s test --tree=dir=files
+ 
+ newrev=$(${CMD_PREFIX} ostree --repo=repo rev-parse test)
+ 
+-${CMD_PREFIX} ostree --repo=repo static-delta generate --from=${origrev} --to=${newrev} --inline
++${CMD_PREFIX} ostree --repo=repo static-delta generate --if-not-exists --from=${origrev} --to=${newrev} --inline
++${CMD_PREFIX} ostree --repo=repo static-delta generate --if-not-exists --from=${origrev} --to=${newrev} --inline > out.txt
++assert_file_has_content out.txt "${origrev}-${newrev} already exists"
++# Should regenerate
++${CMD_PREFIX} ostree --repo=repo static-delta generate --from=${origrev} --to=${newrev} --inline > out.txt
++assert_not_file_has_content out.txt "${origrev}-${newrev} already exists"
+ 
+ deltaprefix=$(get_assert_one_direntry_matching repo/deltas '.')
+ deltadir=$(get_assert_one_direntry_matching repo/deltas/${deltaprefix} '-')
+-- 
+2.7.4
+
