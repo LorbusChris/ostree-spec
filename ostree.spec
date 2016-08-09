@@ -8,7 +8,6 @@ Source1: 91-ostree.preset
 License: LGPLv2+
 URL: http://live.gnome.org/OSTree
 
-Patch0: 0001-delta-Add-if-not-exists-option.patch
 Patch2: 0001-ostree-remount-Explicitly-set-tmp-to-01777.patch
 Patch3: 0001-prune-Retain-the-tip-of-each-ref-even-with-date-prun.patch
 
