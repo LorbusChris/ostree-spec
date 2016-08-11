@@ -97,8 +97,6 @@ install -D -m 0644 %{SOURCE1} $RPM_BUILD_ROOT/%{_prefix}/lib/systemd/system-pres
 %doc README.md
 %{_bindir}/ostree
 %{_bindir}/rofiles-fuse
-%{_sbindir}/ostree-prepare-root
-%{_sbindir}/ostree-remount
 %{_datadir}/ostree/trusted.gpg.d
 %{_sysconfdir}/ostree
 %{_sysconfdir}/dracut.conf.d/ostree.conf
@@ -111,6 +109,9 @@ install -D -m 0644 %{SOURCE1} $RPM_BUILD_ROOT/%{_prefix}/lib/systemd/system-pres
 %{_prefix}/lib/systemd/system-preset/91-ostree.preset
 %exclude %{_sysconfdir}/grub.d/*ostree
 %exclude %{_libexecdir}/ostree/grub2*
+# Moved in git master
+%{_prefix}/lib/ostree/ostree-prepare-root
+%{_prefix}/lib/ostree/ostree-remount
 
 %files devel
 %{_libdir}/lib*.so
