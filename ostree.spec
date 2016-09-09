@@ -1,7 +1,7 @@
 Summary: Tool for managing bootable, immutable filesystem trees
 Name: ostree
 Version: 2016.10
-Release: 1%{?dist}
+Release: 2%{?dist}
 #VCS: git:git://git.gnome.org/ostree
 Source0: https://github.com/ostreedev/%{name}/releases/download/v%{version}/%{name}-%{version}.tar.xz
 Source1: 91-ostree.preset
@@ -16,7 +16,6 @@ BuildRequires: autoconf automake libtool
 # For docs
 BuildRequires: gtk-doc
 # Core requirements
-BuildRequires: pkgconfig(libgsystem) >= 2015.1
 BuildRequires: pkgconfig(libsoup-2.4)
 BuildRequires: libattr-devel
 # Extras
@@ -33,7 +32,6 @@ BuildRequires: dracut
 BuildRequires:  bison
 
 # Runtime requirements
-Requires: libgsystem >= 2015.1
 Requires: dracut
 Requires: /usr/bin/gpgv2
 Requires: systemd-units
@@ -128,6 +126,9 @@ install -D -m 0644 %{SOURCE1} $RPM_BUILD_ROOT/%{_prefix}/lib/systemd/system-pres
 %endif
 
 %changelog
+* Fri Sep 09 2016 Kalev Lember <klember@redhat.com> - 2016.10-2
+- Drop libgsystem dependency
+
 * Thu Sep 08 2016 walters@redhat.com - 2016.10-1
 - New upstream version
 
