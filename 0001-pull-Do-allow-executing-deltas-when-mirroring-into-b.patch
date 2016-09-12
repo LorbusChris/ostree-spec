@@ -1,0 +1,54 @@
+From 5893b68ef76b10fc4267faa09d27588f2594b2f6 Mon Sep 17 00:00:00 2001
+From: Colin Walters <walters@verbum.org>
+Date: Sun, 11 Sep 2016 20:33:42 -0400
+Subject: [PATCH] pull: Do allow executing deltas when mirroring into
+ bare{,-user}
+
+In https://github.com/ostreedev/ostree/pull/408 we fixed a
+bug where we would crash when trying to execute deltas into
+an archive repo (which isn't presently supported).
+
+But that was overly aggressive - we obviously *can* execute deltas
+when mirroring into a bare repo.  This should fix a regression with
+the way flatpak uses mirroring to pull from a user repo into the
+system.
+
+Closes: #506
+Approved by: alexlarsson
+---
+ src/libostree/ostree-repo-pull.c | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
+
+diff --git a/src/libostree/ostree-repo-pull.c b/src/libostree/ostree-repo-pull.c
+index 76c2927..01561df 100644
+--- a/src/libostree/ostree-repo-pull.c
++++ b/src/libostree/ostree-repo-pull.c
+@@ -2272,6 +2272,7 @@ ostree_repo_pull_with_options (OstreeRepo             *self,
+   const char *url_override = NULL;
+   g_autofree char *base_meta_url = NULL;
+   g_autofree char *base_content_url = NULL;
++  gboolean mirroring_into_archive;
+ 
+   if (options)
+     {
+@@ -2312,6 +2313,8 @@ ostree_repo_pull_with_options (OstreeRepo             *self,
+   pull_data->is_untrusted = (flags & OSTREE_REPO_PULL_FLAGS_UNTRUSTED) > 0;
+   pull_data->cancellable = cancellable ? g_object_ref (cancellable) : NULL;
+ 
++  mirroring_into_archive = pull_data->is_mirror && self->mode == OSTREE_REPO_MODE_ARCHIVE_Z2;
++
+   if (error)
+     pull_data->async_error = &pull_data->cached_async_error;
+   else
+@@ -2845,7 +2848,7 @@ ostree_repo_pull_with_options (OstreeRepo             *self,
+                                     &from_revision, error))
+         goto out;
+ 
+-      if (!disable_static_deltas && !pull_data->is_mirror &&
++      if (!disable_static_deltas && !mirroring_into_archive &&
+           (from_revision == NULL || g_strcmp0 (from_revision, to_revision) != 0))
+         {
+           if (!request_static_delta_superblock_sync (pull_data, from_revision, to_revision,
+-- 
+2.7.4
+
