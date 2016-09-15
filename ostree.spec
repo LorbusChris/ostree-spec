@@ -1,7 +1,7 @@
 Summary: Tool for managing bootable, immutable filesystem trees
 Name: ostree
 Version: 2016.10
-Release: 3%{?dist}
+Release: 4%{?dist}
 #VCS: git:git://git.gnome.org/ostree
 Source0: https://github.com/ostreedev/%{name}/releases/download/v%{version}/%{name}-%{version}.tar.xz
 Source1: 91-ostree.preset
@@ -130,7 +130,7 @@ install -D -m 0644 %{SOURCE1} $RPM_BUILD_ROOT/%{_prefix}/lib/systemd/system-pres
 %endif
 
 %changelog
-* Thu Sep 15 2016 walters@verbum.org - 2016.10-3
+* Thu Sep 15 2016 walters@verbum.org - 2016.10-4
 - Backport patch to fix bug#1265295
 
 * Mon Sep 12 2016 Kalev Lember <klember@redhat.com> - 2016.10-3
