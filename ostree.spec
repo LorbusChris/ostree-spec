@@ -12,6 +12,7 @@ URL: http://live.gnome.org/OSTree
 Patch0: 0001-pull-Do-allow-executing-deltas-when-mirroring-into-b.patch
 
 Patch2: 0001-ostree-remount-Explicitly-set-tmp-to-01777.patch
+Patch3: 0001-boot-Ensure-we-remount-var-writable-before-systemd-d.patch
 
 BuildRequires: git
 # We always run autogen.sh
@@ -129,6 +130,9 @@ install -D -m 0644 %{SOURCE1} $RPM_BUILD_ROOT/%{_prefix}/lib/systemd/system-pres
 %endif
 
 %changelog
+* Thu Sep 15 2016 walters@verbum.org - 2016.10-3
+- Backport patch to fix bug#1265295
+
 * Mon Sep 12 2016 Kalev Lember <klember@redhat.com> - 2016.10-3
 - pull: Do allow executing deltas when mirroring into bare{,-user}
 

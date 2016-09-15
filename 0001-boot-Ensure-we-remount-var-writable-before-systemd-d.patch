@@ -1,0 +1,31 @@
+From 450361d89bb937e157994abb15923a881da57ba3 Mon Sep 17 00:00:00 2001
+From: Colin Walters <walters@verbum.org>
+Date: Wed, 14 Sep 2016 12:56:07 -0400
+Subject: [PATCH] boot: Ensure we remount /var writable before systemd does
+ journal flush
+
+Otherwise, we may not get a persistent journal for the first boot.
+https://bugzilla.redhat.com/show_bug.cgi?id=1265295
+
+Closes: #511
+Approved by: jlebon
+---
+ src/boot/ostree-remount.service | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/src/boot/ostree-remount.service b/src/boot/ostree-remount.service
+index 61dd5fa..8439b49 100644
+--- a/src/boot/ostree-remount.service
++++ b/src/boot/ostree-remount.service
+@@ -25,7 +25,7 @@ After=-.mount
+ After=systemd-remount-fs.service
+ Before=local-fs.target umount.target
+ # Other early boot units that need to write to /var
+-Before=systemd-random-seed.service plymouth-read-write.service
++Before=systemd-random-seed.service plymouth-read-write.service systemd-journal-flush.service
+ # tmpfiles.d usually needs write access to a few places
+ Before=systemd-tmpfiles-setup.service
+ 
+-- 
+2.7.4
+
