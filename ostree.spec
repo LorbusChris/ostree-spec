@@ -101,7 +101,6 @@ install -D -m 0644 %{SOURCE1} $RPM_BUILD_ROOT/%{_prefix}/lib/systemd/system-pres
 %{_bindir}/rofiles-fuse
 %{_datadir}/ostree/trusted.gpg.d
 %{_sysconfdir}/ostree
-%{_sysconfdir}/dracut.conf.d/ostree.conf
 %dir %{_prefix}/lib/dracut/modules.d/98ostree
 %{_prefix}/lib/systemd/system/ostree*.service
 %{_prefix}/lib/dracut/modules.d/98ostree/*
