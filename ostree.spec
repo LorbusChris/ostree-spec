@@ -1,7 +1,7 @@
 Summary: Tool for managing bootable, immutable filesystem trees
 Name: ostree
 Version: 2016.10
-Release: 6%{?dist}
+Release: 8%{?dist}
 #VCS: git:git://git.gnome.org/ostree
 Source0: https://github.com/ostreedev/%{name}/releases/download/v%{version}/%{name}-%{version}.tar.xz
 Source1: 91-ostree.preset
@@ -13,6 +13,7 @@ Patch0: 0001-pull-Do-allow-executing-deltas-when-mirroring-into-b.patch
 
 Patch2: 0001-ostree-remount-Explicitly-set-tmp-to-01777.patch
 Patch3: 0001-boot-Ensure-we-remount-var-writable-before-systemd-d.patch
+Patch4: 0001-ostree_sysroot_init_osname-also-create-var-log.patch
 
 BuildRequires: git
 # We always run autogen.sh
@@ -129,6 +130,10 @@ install -D -m 0644 %{SOURCE1} $RPM_BUILD_ROOT/%{_prefix}/lib/systemd/system-pres
 %endif
 
 %changelog
+* Tue Sep 20 2016 walters@redhat.com - 2016.10-8
+- Backport another patch for systemd journal
+  Resolves: #1265295
+
 * Fri Sep 16 2016 walters@verbum.org - 2016.10-6
 - Set --with-dracut=yesbutnoconf
   Resolves: #1331369
