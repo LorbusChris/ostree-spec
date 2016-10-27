@@ -6,7 +6,7 @@ Release: 1%{?dist}
 Source0: https://github.com/ostreedev/%{name}/releases/download/v%{version}/%{name}-%{version}.tar.xz
 Source1: 91-ostree.preset
 License: LGPLv2+
-URL: http://live.gnome.org/OSTree
+URL: https://ostree.readthedocs.io/en/latest/
 
 # Backported from upstream
 Patch2: 0001-ostree-remount-Explicitly-set-tmp-to-01777.patch
