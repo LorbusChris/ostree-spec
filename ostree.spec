@@ -76,12 +76,12 @@ env NOCONFIGURE=1 ./autogen.sh
 	   --enable-gtk-doc \
 	   --with-selinux \
 	   --with-dracut=yesbutnoconf
-make %{?_smp_mflags}
+%make_build
 
 %install
-make install DESTDIR=$RPM_BUILD_ROOT INSTALL="install -p -c"
-find $RPM_BUILD_ROOT -name '*.la' -delete
-install -D -m 0644 %{SOURCE1} $RPM_BUILD_ROOT/%{_prefix}/lib/systemd/system-preset/91-ostree.preset
+%make_install INSTALL="install -p -c"
+find %{buildroot} -name '*.la' -delete
+install -D -m 0644 %{SOURCE1} %{buildroot}%{_prefix}/lib/systemd/system-preset/91-ostree.preset
 
 
 %post
