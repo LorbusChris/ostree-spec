@@ -1,7 +1,7 @@
 Summary: Tool for managing bootable, immutable filesystem trees
 Name: ostree
-Version: 2016.12
-Release: 1%{?dist}
+Version: 2016.13
+Release: 2%{?dist}
 #VCS: git:git://git.gnome.org/ostree
 Source0: https://github.com/ostreedev/%{name}/releases/download/v%{version}/%{name}-%{version}.tar.xz
 Source1: 91-ostree.preset
@@ -34,6 +34,8 @@ BuildRequires:  bison
 
 # Runtime requirements
 Requires: dracut
+# To ensure we have TLS
+Requires: glib-networking
 Requires: /usr/bin/gpgv2
 Requires: systemd-units
 
@@ -126,6 +128,10 @@ install -D -m 0644 %{SOURCE1} %{buildroot}%{_prefix}/lib/systemd/system-preset/9
 %endif
 
 %changelog
+* Tue Nov 15 2016 walters@redhat.com - 2016.13-2
+- New upstream version
+- Require glib-networking to fix https://pagure.io/pungi-fedora/pull-request/103
+
 * Sun Oct 23 2016 walters@verbum.org - 2016.12-1
 - New upstream release
 
