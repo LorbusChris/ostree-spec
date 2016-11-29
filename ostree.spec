@@ -1,7 +1,7 @@
 Summary: Tool for managing bootable, immutable filesystem trees
 Name: ostree
 Version: 2016.14
-Release: 1%{?dist}
+Release: 2%{?dist}
 #VCS: git:git://git.gnome.org/ostree
 Source0: https://github.com/ostreedev/%{name}/releases/download/v%{version}/%{name}-%{version}.tar.xz
 Source1: 91-ostree.preset
@@ -9,6 +9,7 @@ License: LGPLv2+
 URL: https://ostree.readthedocs.io/en/latest/
 
 # Backported from upstream
+Patch1: 0001-ostree-repo-traverse-Remove-an-accidental-print-stat.patch
 Patch2: 0001-ostree-remount-Explicitly-set-tmp-to-01777.patch
 
 BuildRequires: git
@@ -128,6 +129,9 @@ install -D -m 0644 %{SOURCE1} %{buildroot}%{_prefix}/lib/systemd/system-preset/9
 %endif
 
 %changelog
+* Tue Nov 29 2016 Kalev Lember <klember@redhat.com> - 2016.14-2
+- Backport a patch to remove an accidental print statement
+
 * Wed Nov 23 2016 walters@redhat.com - 2016.14-1
 - New upstream version
 
