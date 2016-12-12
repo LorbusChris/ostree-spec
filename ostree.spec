@@ -9,7 +9,6 @@ License: LGPLv2+
 URL: https://ostree.readthedocs.io/en/latest/
 
 # Backported from upstream
-Patch1: 0001-ostree-repo-traverse-Remove-an-accidental-print-stat.patch
 Patch2: 0001-ostree-remount-Explicitly-set-tmp-to-01777.patch
 
 BuildRequires: git
