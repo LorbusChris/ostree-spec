@@ -109,9 +109,10 @@ install -D -m 0644 %{SOURCE1} %{buildroot}%{_prefix}/lib/systemd/system-preset/9
 %{_prefix}/lib/systemd/system-preset/91-ostree.preset
 %exclude %{_sysconfdir}/grub.d/*ostree
 %exclude %{_libexecdir}/ostree/grub2*
-# Moved in git master
 %{_prefix}/lib/ostree/ostree-prepare-root
 %{_prefix}/lib/ostree/ostree-remount
+# Moved in git master
+%{_libexecdir}/ostree/*
 
 %files devel
 %{_libdir}/lib*.so
