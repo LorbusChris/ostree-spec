@@ -1,7 +1,7 @@
 Summary: Tool for managing bootable, immutable filesystem trees
 Name: ostree
 Version: 2016.15
-Release: 1%{?dist}
+Release: 2%{?dist}
 #VCS: git:git://git.gnome.org/ostree
 Source0: https://github.com/ostreedev/%{name}/releases/download/v%{version}/%{name}-%{version}.tar.xz
 Source1: 91-ostree.preset
@@ -23,6 +23,7 @@ BuildRequires: libattr-devel
 BuildRequires: pkgconfig(libarchive)
 BuildRequires: pkgconfig(liblzma)
 BuildRequires: pkgconfig(libselinux)
+BuildRequires: pkgconfig(mount)
 BuildRequires: pkgconfig(fuse)
 BuildRequires: pkgconfig(e2p)
 BuildRequires: libcap-devel
@@ -129,6 +130,9 @@ install -D -m 0644 %{SOURCE1} %{buildroot}%{_prefix}/lib/systemd/system-preset/9
 %endif
 
 %changelog
+* Wed Jan 18 2017 Colin Walters <walters@verbum.org> - 2016.15-2
+- Enable libmount for /boot readonly
+
 * Mon Dec 12 2016 walters@redhat.com - 2016.15-1
 - New upstream version
 
