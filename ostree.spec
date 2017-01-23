@@ -1,6 +1,6 @@
 Summary: Tool for managing bootable, immutable filesystem trees
 Name: ostree
-Version: 2016.15
+Version: 2017.1
 Release: 2%{?dist}
 #VCS: git:git://git.gnome.org/ostree
 Source0: https://github.com/ostreedev/%{name}/releases/download/v%{version}/%{name}-%{version}.tar.xz
@@ -130,6 +130,9 @@ install -D -m 0644 %{SOURCE1} %{buildroot}%{_prefix}/lib/systemd/system-preset/9
 %endif
 
 %changelog
+* Mon Jan 23 2017 Colin Walters <walters@verbum.org> - 2017.1-2
+- New upstream version
+
 * Wed Jan 18 2017 Colin Walters <walters@verbum.org> - 2016.15-2
 - Enable libmount for /boot readonly
 
