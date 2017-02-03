@@ -109,11 +109,11 @@ install -D -m 0644 %{SOURCE1} %{buildroot}%{_prefix}/lib/systemd/system-preset/9
 %{_mandir}/man*/*.gz
 %{_prefix}/lib/systemd/system-preset/91-ostree.preset
 %exclude %{_sysconfdir}/grub.d/*ostree
-%exclude %{_libexecdir}/ostree/grub2*
+%exclude %{_libexecdir}/libostree/grub2*
 %{_prefix}/lib/ostree/ostree-prepare-root
 %{_prefix}/lib/ostree/ostree-remount
 # Moved in git master
-%{_libexecdir}/ostree/*
+%{_libexecdir}/libostree/*
 
 %files devel
 %{_libdir}/lib*.so
@@ -126,7 +126,7 @@ install -D -m 0644 %{SOURCE1} %{buildroot}%{_prefix}/lib/systemd/system-preset/9
 %ifnarch s390 s390x %{arm}
 %files grub2
 %{_sysconfdir}/grub.d/*ostree
-%{_libexecdir}/ostree/grub2*
+%{_libexecdir}/libostree/grub2*
 %endif
 
 %changelog
