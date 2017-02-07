@@ -3,7 +3,7 @@ Name: ostree
 Version: 2017.1
 Release: 2%{?dist}
 #VCS: git:git://git.gnome.org/ostree
-Source0: https://github.com/ostreedev/%{name}/releases/download/v%{version}/%{name}-%{version}.tar.xz
+Source0: https://github.com/ostreedev/%{name}/releases/download/v%{version}/libostree-%{version}.tar.xz
 Source1: 91-ostree.preset
 License: LGPLv2+
 URL: https://ostree.readthedocs.io/en/latest/
@@ -71,7 +71,7 @@ GRUB2 integration for OSTree
 %endif
 
 %prep
-%autosetup -Sgit -n ostree-%{version}
+%autosetup -Sgit -n libostree-%{version}
 
 %build
 env NOCONFIGURE=1 ./autogen.sh
