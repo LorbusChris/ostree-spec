@@ -1,7 +1,7 @@
 Summary: Tool for managing bootable, immutable filesystem trees
 Name: ostree
 Version: 2017.1
-Release: 2%{?dist}
+Release: 3%{?dist}
 #VCS: git:git://git.gnome.org/ostree
 Source0: https://github.com/ostreedev/%{name}/releases/download/v%{version}/libostree-%{version}.tar.xz
 Source1: 91-ostree.preset
@@ -48,10 +48,17 @@ is it a tool for managing full disk images. Instead, it sits between
 those levels, offering a blend of the advantages (and disadvantages)
 of both.
 
+%package libs
+Summary: Development headers for %{name}
+Group: Development/Libraries
+
+%description libs
+The %{name}-libs provides shared libraries for %{name}.
+
 %package devel
 Summary: Development headers for %{name}
 Group: Development/Libraries
-Requires: %{name} =  %{?epoch:%{epoch}:}%{version}-%{release}
+Requires: %{name}-libs =  %{?epoch:%{epoch}:}%{version}-%{release}
 
 %description devel
 The %{name}-devel package includes the header files for the %{name} library.
@@ -100,12 +107,9 @@ install -D -m 0644 %{SOURCE1} %{buildroot}%{_prefix}/lib/systemd/system-preset/9
 %{_bindir}/ostree
 %{_bindir}/rofiles-fuse
 %{_datadir}/ostree/trusted.gpg.d
-%{_sysconfdir}/ostree
 %dir %{_prefix}/lib/dracut/modules.d/98ostree
 %{_prefix}/lib/systemd/system/ostree*.service
 %{_prefix}/lib/dracut/modules.d/98ostree/*
-%{_libdir}/*.so.1*
-%{_libdir}/girepository-1.0/OSTree-1.0.typelib
 %{_mandir}/man*/*.gz
 %{_prefix}/lib/systemd/system-preset/91-ostree.preset
 %exclude %{_sysconfdir}/grub.d/*ostree
@@ -114,6 +118,11 @@ install -D -m 0644 %{SOURCE1} %{buildroot}%{_prefix}/lib/systemd/system-preset/9
 %{_prefix}/lib/ostree/ostree-remount
 # Moved in git master
 %{_libexecdir}/libostree/*
+
+%files libs
+%{_sysconfdir}/ostree
+%{_libdir}/*.so.1*
+%{_libdir}/girepository-1.0/OSTree-1.0.typelib
 
 %files devel
 %{_libdir}/lib*.so
@@ -130,6 +139,13 @@ install -D -m 0644 %{SOURCE1} %{buildroot}%{_prefix}/lib/systemd/system-preset/9
 %endif
 
 %changelog
+* Tue Feb 07 2017 Colin Walters <walters@verbum.org> - 2017.1-3
+- Split off ostree-libs.  This is the inverse of upstream
+  https://github.com/ostreedev/ostree/pull/659
+  but renaming the package would be hard for low immediate gain.
+  With this at least, flatpak could theoretically depend just on libostree.
+  And similarly for rpm-ostree compose tree (when that gets split out).
+
 * Mon Jan 23 2017 Colin Walters <walters@verbum.org> - 2017.1-2
 - New upstream version
 
