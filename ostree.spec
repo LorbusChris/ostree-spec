@@ -8,9 +8,6 @@ Source1: 91-ostree.preset
 License: LGPLv2+
 URL: https://ostree.readthedocs.io/en/latest/
 
-# Backported from upstream
-Patch2: 0001-ostree-remount-Explicitly-set-tmp-to-01777.patch
-
 BuildRequires: git
 # We always run autogen.sh
 BuildRequires: autoconf automake libtool
