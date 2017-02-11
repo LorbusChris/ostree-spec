@@ -1,7 +1,7 @@
 Summary: Tool for managing bootable, immutable filesystem trees
 Name: ostree
 Version: 2017.1
-Release: 4%{?dist}
+Release: 5%{?dist}
 #VCS: git:git://git.gnome.org/ostree
 Source0: https://github.com/ostreedev/%{name}/releases/download/v%{version}/libostree-%{version}.tar.xz
 Source1: 91-ostree.preset
@@ -137,6 +137,9 @@ install -D -m 0644 %{SOURCE1} %{buildroot}%{_prefix}/lib/systemd/system-preset/9
 %endif
 
 %changelog
+* Sat Feb 11 2017 Fedora Release Engineering <releng@fedoraproject.org> - 2017.1-5
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_26_Mass_Rebuild
+
 * Tue Feb 07 2017 Jonathan Lebon <jlebon@redhat.com> - 2017.1-4
 - Make ostree-grub2 require ostree
 
