@@ -1,0 +1,43 @@
+From 4c3ef23b59c870281a75424c74ec0b6b5a4ae5e8 Mon Sep 17 00:00:00 2001
+From: Colin Walters <walters@verbum.org>
+Date: Thu, 23 Feb 2017 09:40:17 -0500
+Subject: [PATCH] deploy: Correctly use libmount unref() calls rather than
+ free()
+
+We saw a random ostree SEGV start popping up in our CI environment:
+https://github.com/projectatomic/rpm-ostree/pull/641#issuecomment-281870424
+
+Looking at this code more and comparing it to what util-linux does, I noticed we
+had a write-after-free, since `mnt_unref_table()` will invoke
+`mnt_unref_cache()` on its cache, and that function does:
+
+```
+	if (cache) {
+		cache->rfcount--;
+```
+
+unconditionally.
+
+Fix this by using `unref()`.
+---
+ src/libostree/ostree-sysroot-deploy.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/src/libostree/ostree-sysroot-deploy.c b/src/libostree/ostree-sysroot-deploy.c
+index cb5a461..5a3f6d8 100644
+--- a/src/libostree/ostree-sysroot-deploy.c
++++ b/src/libostree/ostree-sysroot-deploy.c
+@@ -1692,8 +1692,8 @@ is_ro_mount (const char *path)
+ 
+   fs = mnt_table_find_target(tb, path, MNT_ITER_BACKWARD);
+   is_mount = fs && mnt_fs_get_target (fs);
+-  mnt_free_cache (cache);
+-  mnt_free_table (tb);
++  mnt_unref_cache (cache);
++  mnt_unref_table (tb);
+ 
+   if (!is_mount)
+     return FALSE;
+-- 
+2.9.3
+
