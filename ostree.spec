@@ -1,7 +1,7 @@
 Summary: Tool for managing bootable, immutable filesystem trees
 Name: ostree
 Version: 2017.2
-Release: 3%{?dist}
+Release: 4%{?dist}
 #VCS: git:git://git.gnome.org/ostree
 Source0: https://github.com/ostreedev/%{name}/releases/download/v%{version}/libostree-%{version}.tar.xz
 Source1: 91-ostree.preset
@@ -9,6 +9,7 @@ License: LGPLv2+
 URL: https://ostree.readthedocs.io/en/latest/
 
 Patch0: libmount-unref.patch
+Patch1: 0001-grub2-Use-linux16-only-on-x86-x86_64.patch
 
 BuildRequires: git
 # We always run autogen.sh
@@ -139,6 +140,9 @@ install -D -m 0644 %{SOURCE1} %{buildroot}%{_prefix}/lib/systemd/system-preset/9
 %endif
 
 %changelog
+* Fri Mar 03 2017 Colin Walters <walters@verbum.org> - 2017.2-4
+- Add patch for ppc64le grub2
+
 * Thu Feb 23 2017 Colin Walters <walters@verbum.org> - 2017.2-3
 - Backport libmount unref patch
 
