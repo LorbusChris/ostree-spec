@@ -22,9 +22,9 @@ BuildRequires: gtk-doc
 BuildRequires: pkgconfig(zlib)
 %if %{with curl}
 BuildRequires: pkgconfig(libcurl)
-%else
-BuildRequires: pkgconfig(libsoup-2.4)
 %endif
+# The tests still require soup
+BuildRequires: pkgconfig(libsoup-2.4)
 BuildRequires: libattr-devel
 # Extras
 BuildRequires: pkgconfig(libarchive)
