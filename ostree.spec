@@ -19,6 +19,7 @@ BuildRequires: autoconf automake libtool
 # For docs
 BuildRequires: gtk-doc
 # Core requirements
+BuildRequires: pkgconfig(zlib)
 %if %{with curl}
 BuildRequires: pkgconfig(libcurl)
 %else
