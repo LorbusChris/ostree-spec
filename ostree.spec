@@ -1,3 +1,5 @@
+%bcond_with curl
+
 Summary: Tool for managing bootable, immutable filesystem trees
 Name: ostree
 Version: 2017.2
@@ -17,7 +19,11 @@ BuildRequires: autoconf automake libtool
 # For docs
 BuildRequires: gtk-doc
 # Core requirements
+%if %{with curl}
+BuildRequires: pkgconfig(libcurl)
+%else
 BuildRequires: pkgconfig(libsoup-2.4)
+%endif
 BuildRequires: libattr-devel
 # Extras
 BuildRequires: pkgconfig(libarchive)
@@ -86,6 +92,9 @@ env NOCONFIGURE=1 ./autogen.sh
 %configure --disable-silent-rules \
 	   --enable-gtk-doc \
 	   --with-selinux \
+%if %{with curl}
+--with-curl \
+%endif
 	   --with-dracut=yesbutnoconf
 %make_build
 
