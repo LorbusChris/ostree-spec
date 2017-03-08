@@ -102,6 +102,7 @@ env NOCONFIGURE=1 ./autogen.sh
 %install
 %make_install INSTALL="install -p -c"
 find %{buildroot} -name '*.la' -delete
+rm -f %{buildroot}/usr/libexec/libostree/ostree-trivial-httpd
 install -D -m 0644 %{SOURCE1} %{buildroot}%{_prefix}/lib/systemd/system-preset/91-ostree.preset
 
 
