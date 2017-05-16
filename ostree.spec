@@ -117,6 +117,7 @@ install -D -m 0644 %{SOURCE1} %{buildroot}%{_prefix}/lib/systemd/system-preset/9
 %{_prefix}/lib/systemd/system/ostree*.service
 %{_prefix}/lib/dracut/modules.d/98ostree/*
 %{_mandir}/man*/*.gz
+%{_prefix}/lib/systemd/system-generators/ostree-system-generator
 %{_prefix}/lib/systemd/system-preset/91-ostree.preset
 %exclude %{_sysconfdir}/grub.d/*ostree
 %exclude %{_libexecdir}/libostree/grub2*
