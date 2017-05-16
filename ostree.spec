@@ -5,6 +5,7 @@ Name: ostree
 Version: 2017.5
 Release: 2%{?dist}
 Source0: https://github.com/ostreedev/%{name}/releases/download/v%{version}/libostree-%{version}.tar.xz
+# https://bugzilla.redhat.com/show_bug.cgi?id=1451458
 Source1: 91-ostree.preset
 License: LGPLv2+
 URL: https://ostree.readthedocs.io/en/latest/

@@ -1,1 +1,2 @@
+# https://bugzilla.redhat.com/show_bug.cgi?id=1451458
 enable ostree-remount.service
