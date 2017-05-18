@@ -1,9 +1,15 @@
+# Currently libcurl for 27+; we will likely expand this
+# to 26/25 soon.  See https://bugzilla.redhat.com/show_bug.cgi?id=1430489
+%if 0%{?fedora} > 26
 %bcond_with curl
+%else
+%bcond_without curl
+%endif
 
 Summary: Tool for managing bootable, immutable filesystem trees
 Name: ostree
 Version: 2017.6
-Release: 2%{?dist}
+Release: 3%{?dist}
 Source0: https://github.com/ostreedev/%{name}/releases/download/v%{version}/libostree-%{version}.tar.xz
 # https://bugzilla.redhat.com/show_bug.cgi?id=1451458
 Source1: 91-ostree.preset
@@ -19,6 +25,7 @@ BuildRequires: gtk-doc
 BuildRequires: pkgconfig(zlib)
 %if %{with curl}
 BuildRequires: pkgconfig(libcurl)
+BuildRequires: pkgconfig(openssl)
 %endif
 # The tests still require soup
 BuildRequires: pkgconfig(libsoup-2.4)
@@ -91,7 +98,8 @@ env NOCONFIGURE=1 ./autogen.sh
 	   --enable-gtk-doc \
 	   --with-selinux \
 %if %{with curl}
---with-curl \
+    --with-curl \
+    --with-openssl \
 %endif
 	   --with-dracut=yesbutnoconf
 %make_build
@@ -147,6 +155,12 @@ install -D -m 0644 %{SOURCE1} %{buildroot}%{_prefix}/lib/systemd/system-preset/9
 %endif
 
 %changelog
+* Thu May 18 2017 Colin Walters <walters@verbum.org> - 2017.6-3
+- Enable curl+openssl on f27+
+  It has various advantages like HTTP2, plus now that NetworkManager
+  switched we are the last thing left in Fedora Atomic Host depending
+  on libsoup.
+
 * Wed May 17 2017 Colin Walters <walters@verbum.org> - 2017.6-2
 - New upstream version
 
