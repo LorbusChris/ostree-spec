@@ -1,15 +1,17 @@
 # Currently libcurl for 27+; we will likely expand this
 # to 26/25 soon.  See https://bugzilla.redhat.com/show_bug.cgi?id=1430489
 %if 0%{?fedora} > 26
-%bcond_with curl
-%else
+# This is supported by upstream currently, so we'll expose it as well,
+# even though (main) Fedora doesn't use bconds.
 %bcond_without curl
+%else
+%bcond_with curl
 %endif
 
 Summary: Tool for managing bootable, immutable filesystem trees
 Name: ostree
 Version: 2017.6
-Release: 3%{?dist}
+Release: 4%{?dist}
 Source0: https://github.com/ostreedev/%{name}/releases/download/v%{version}/libostree-%{version}.tar.xz
 # https://bugzilla.redhat.com/show_bug.cgi?id=1451458
 Source1: 91-ostree.preset
@@ -46,8 +48,10 @@ BuildRequires:  bison
 
 # Runtime requirements
 Requires: dracut
+%if !%{with curl}
 # To ensure we have TLS
 Requires: glib-networking
+%endif
 Requires: /usr/bin/gpgv2
 Requires: systemd-units
 
@@ -108,6 +112,8 @@ env NOCONFIGURE=1 ./autogen.sh
 %make_install INSTALL="install -p -c"
 find %{buildroot} -name '*.la' -delete
 install -D -m 0644 %{SOURCE1} %{buildroot}%{_prefix}/lib/systemd/system-preset/91-ostree.preset
+# Right now we aren't doing installed tests here
+rm -f %{buildroot}%{_libexecdir}/libostree/ostree-trivial-httpd
 
 %post
 %systemd_post ostree-remount.service
@@ -155,6 +161,9 @@ install -D -m 0644 %{SOURCE1} %{buildroot}%{_prefix}/lib/systemd/system-preset/9
 %endif
 
 %changelog
+* Fri Jun 02 2017 Colin Walters <walters@verbum.org> - 2017.6-4
+- Fix previous commit to actually work
+
 * Thu May 18 2017 Colin Walters <walters@verbum.org> - 2017.6-3
 - Enable curl+openssl on f27+
   It has various advantages like HTTP2, plus now that NetworkManager
