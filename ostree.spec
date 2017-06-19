@@ -10,8 +10,8 @@
 
 Summary: Tool for managing bootable, immutable filesystem trees
 Name: ostree
-Version: 2017.6
-Release: 4%{?dist}
+Version: 2017.7
+Release: 2%{?dist}
 Source0: https://github.com/ostreedev/%{name}/releases/download/v%{version}/libostree-%{version}.tar.xz
 # https://bugzilla.redhat.com/show_bug.cgi?id=1451458
 Source1: 91-ostree.preset
@@ -161,6 +161,9 @@ rm -f %{buildroot}%{_libexecdir}/libostree/ostree-trivial-httpd
 %endif
 
 %changelog
+* Mon Jun 19 2017 Colin Walters <walters@verbum.org> - 2017.7-2
+- Update to new upstream
+
 * Fri Jun 02 2017 Colin Walters <walters@verbum.org> - 2017.6-4
 - Fix previous commit to actually work
 
