@@ -1,6 +1,6 @@
 # Currently libcurl for 27+; we will likely expand this
 # to 26/25 soon.  See https://bugzilla.redhat.com/show_bug.cgi?id=1430489
-%if 0%{?fedora} > 26
+%if 0%{?fedora} > 25
 # This is supported by upstream currently, so we'll expose it as well,
 # even though (main) Fedora doesn't use bconds.
 %bcond_without curl
@@ -11,7 +11,7 @@
 Summary: Tool for managing bootable, immutable filesystem trees
 Name: ostree
 Version: 2017.8
-Release: 2%{?dist}
+Release: 3%{?dist}
 Source0: https://github.com/ostreedev/%{name}/releases/download/v%{version}/libostree-%{version}.tar.xz
 # https://bugzilla.redhat.com/show_bug.cgi?id=1451458
 Source1: 91-ostree.preset
@@ -161,6 +161,13 @@ rm -f %{buildroot}%{_libexecdir}/libostree/ostree-trivial-httpd
 %endif
 
 %changelog
+* Mon Jul 17 2017 Colin Walters <walters@verbum.org> - 2017.8-3
+- Switch to libcurl for F26+
+  I think it works well; to recap the arguments below:
+  It has various advantages like HTTP2, plus now that NetworkManager
+  switched we are the last thing left in Fedora Atomic Host depending
+  on libsoup.
+
 * Thu Jul 06 2017 Colin Walters <walters@verbum.org> - 2017.8-2
 - New upstream version
 
