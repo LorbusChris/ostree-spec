@@ -1,17 +1,7 @@
-# Currently libcurl for 27+; we will likely expand this
-# to 26/25 soon.  See https://bugzilla.redhat.com/show_bug.cgi?id=1430489
-%if 0%{?fedora} > 25
-# This is supported by upstream currently, so we'll expose it as well,
-# even though (main) Fedora doesn't use bconds.
-%bcond_without curl
-%else
-%bcond_with curl
-%endif
-
 Summary: Tool for managing bootable, immutable filesystem trees
 Name: ostree
-Version: 2017.8
-Release: 4%{?dist}
+Version: 2017.9
+Release: 2%{?dist}
 Source0: https://github.com/ostreedev/%{name}/releases/download/v%{version}/libostree-%{version}.tar.xz
 # https://bugzilla.redhat.com/show_bug.cgi?id=1451458
 Source1: 91-ostree.preset
@@ -25,10 +15,8 @@ BuildRequires: autoconf automake libtool
 BuildRequires: gtk-doc
 # Core requirements
 BuildRequires: pkgconfig(zlib)
-%if %{with curl}
 BuildRequires: pkgconfig(libcurl)
 BuildRequires: pkgconfig(openssl)
-%endif
 # The tests still require soup
 BuildRequires: pkgconfig(libsoup-2.4)
 BuildRequires: libattr-devel
@@ -48,10 +36,6 @@ BuildRequires:  bison
 
 # Runtime requirements
 Requires: dracut
-%if !%{with curl}
-# To ensure we have TLS
-Requires: glib-networking
-%endif
 Requires: /usr/bin/gpgv2
 Requires: systemd-units
 
@@ -101,10 +85,8 @@ env NOCONFIGURE=1 ./autogen.sh
 %configure --disable-silent-rules \
 	   --enable-gtk-doc \
 	   --with-selinux \
-%if %{with curl}
-    --with-curl \
-    --with-openssl \
-%endif
+     --with-curl \
+     --with-openssl \
 	   --with-dracut=yesbutnoconf
 %make_build
 
@@ -161,6 +143,9 @@ rm -f %{buildroot}%{_libexecdir}/libostree/ostree-trivial-httpd
 %endif
 
 %changelog
+* Thu Jul 27 2017 Colin Walters <walters@verbum.org> - 2017.9-2
+- New upstream version
+
 * Thu Jul 27 2017 Fedora Release Engineering <releng@fedoraproject.org> - 2017.8-4
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_27_Mass_Rebuild
 
