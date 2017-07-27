@@ -11,7 +11,7 @@
 Summary: Tool for managing bootable, immutable filesystem trees
 Name: ostree
 Version: 2017.8
-Release: 3%{?dist}
+Release: 4%{?dist}
 Source0: https://github.com/ostreedev/%{name}/releases/download/v%{version}/libostree-%{version}.tar.xz
 # https://bugzilla.redhat.com/show_bug.cgi?id=1451458
 Source1: 91-ostree.preset
@@ -161,6 +161,9 @@ rm -f %{buildroot}%{_libexecdir}/libostree/ostree-trivial-httpd
 %endif
 
 %changelog
+* Thu Jul 27 2017 Fedora Release Engineering <releng@fedoraproject.org> - 2017.8-4
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_27_Mass_Rebuild
+
 * Mon Jul 17 2017 Colin Walters <walters@verbum.org> - 2017.8-3
 - Switch to libcurl for F26+
   I think it works well; to recap the arguments below:
