@@ -1,7 +1,7 @@
 Summary: Tool for managing bootable, immutable filesystem trees
 Name: ostree
 Version: 2017.9
-Release: 2%{?dist}
+Release: 3%{?dist}
 Source0: https://github.com/ostreedev/%{name}/releases/download/v%{version}/libostree-%{version}.tar.xz
 # https://bugzilla.redhat.com/show_bug.cgi?id=1451458
 Source1: 91-ostree.preset
@@ -143,6 +143,9 @@ rm -f %{buildroot}%{_libexecdir}/libostree/ostree-trivial-httpd
 %endif
 
 %changelog
+* Sun Jul 30 2017 Florian Weimer <fweimer@redhat.com> - 2017.9-3
+- Rebuild with binutils fix for ppc64le (#1475636)
+
 * Thu Jul 27 2017 Colin Walters <walters@verbum.org> - 2017.9-2
 - New upstream version
 
