@@ -1,7 +1,7 @@
 Summary: Tool for managing bootable, immutable filesystem trees
 Name: ostree
 Version: 2017.9
-Release: 4%{?dist}
+Release: 5%{?dist}
 Source0: https://github.com/ostreedev/%{name}/releases/download/v%{version}/libostree-%{version}.tar.xz
 # https://bugzilla.redhat.com/show_bug.cgi?id=1451458
 Source1: 91-ostree.preset
@@ -109,7 +109,7 @@ rm -f %{buildroot}%{_libexecdir}/libostree/ostree-trivial-httpd
 %doc README.md
 %{_bindir}/ostree
 %{_bindir}/rofiles-fuse
-%{_datadir}/ostree/trusted.gpg.d
+%{_datadir}/ostree
 %dir %{_prefix}/lib/dracut/modules.d/98ostree
 %{_prefix}/lib/systemd/system/ostree*.service
 %{_prefix}/lib/dracut/modules.d/98ostree/*
@@ -143,6 +143,9 @@ rm -f %{buildroot}%{_libexecdir}/libostree/ostree-trivial-httpd
 %endif
 
 %changelog
+* Sat Aug 12 2017 Ville Skyttä <ville.skytta@iki.fi> - 2017.9-5
+- Own the %%{_datadir}/ostree dir
+
 * Thu Aug 03 2017 Fedora Release Engineering <releng@fedoraproject.org> - 2017.9-4
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_27_Binutils_Mass_Rebuild
 
