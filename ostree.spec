@@ -110,6 +110,7 @@ rm -f %{buildroot}%{_libexecdir}/libostree/ostree-trivial-httpd
 %{_bindir}/ostree
 %{_bindir}/rofiles-fuse
 %{_datadir}/ostree
+%{_datadir}/bash-completion/completions/*
 %dir %{_prefix}/lib/dracut/modules.d/98ostree
 %{_prefix}/lib/systemd/system/ostree*.service
 %{_prefix}/lib/dracut/modules.d/98ostree/*
