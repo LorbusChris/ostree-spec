@@ -119,6 +119,7 @@ rm -f %{buildroot}%{_libexecdir}/libostree/ostree-trivial-httpd
 %{_prefix}/lib/systemd/system-preset/91-ostree.preset
 %exclude %{_sysconfdir}/grub.d/*ostree
 %exclude %{_libexecdir}/libostree/grub2*
+%{_prefix}/lib/tmpfiles.d/*
 %{_prefix}/lib/ostree/ostree-prepare-root
 %{_prefix}/lib/ostree/ostree-remount
 # Moved in git master
