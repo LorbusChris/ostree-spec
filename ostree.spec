@@ -97,12 +97,6 @@ install -D -m 0644 %{SOURCE1} %{buildroot}%{_prefix}/lib/systemd/system-preset/9
 # Right now we aren't doing installed tests here
 rm -f %{buildroot}%{_libexecdir}/libostree/ostree-trivial-httpd
 
-%post
-%systemd_post ostree-remount.service
-
-%preun
-%systemd_preun ostree-remount.service
-
 %files
 %{!?_licensedir:%global license %%doc}
 %license COPYING
