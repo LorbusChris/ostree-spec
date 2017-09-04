@@ -16,7 +16,7 @@ BuildRequires: gtk-doc
 # Core requirements
 BuildRequires: pkgconfig(zlib)
 BuildRequires: pkgconfig(libcurl)
-BuildRequires: pkgconfig(openssl)
+BuildRequires: openssl-devel
 # The tests still require soup
 BuildRequires: pkgconfig(libsoup-2.4)
 BuildRequires: libattr-devel
