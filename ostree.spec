@@ -1,7 +1,7 @@
 Summary: Tool for managing bootable, immutable filesystem trees
 Name: ostree
-Version: 2017.10
-Release: 3%{?dist}
+Version: 2017.11
+Release: 1%{?dist}
 Source0: https://github.com/ostreedev/%{name}/releases/download/v%{version}/libostree-%{version}.tar.xz
 # https://bugzilla.redhat.com/show_bug.cgi?id=1451458
 Source1: 91-ostree.preset
@@ -77,6 +77,14 @@ Requires: ostree
 GRUB2 integration for OSTree
 %endif
 
+%package tests
+Summary: Tests for the %{name} package
+Requires: %{name}%{?_isa} = %{version}-%{release}
+
+%description tests
+This package contains tests that can be used to verify
+the functionality of the installed %{name} package.
+
 %prep
 %autosetup -Sgit -n libostree-%{version}
 
@@ -87,6 +95,7 @@ env NOCONFIGURE=1 ./autogen.sh
 	   --with-selinux \
      --with-curl \
      --with-openssl \
+     --enable-installed-tests=exclusive \
 	   --with-dracut=yesbutnoconf
 %make_build
 
@@ -94,8 +103,6 @@ env NOCONFIGURE=1 ./autogen.sh
 %make_install INSTALL="install -p -c"
 find %{buildroot} -name '*.la' -delete
 install -D -m 0644 %{SOURCE1} %{buildroot}%{_prefix}/lib/systemd/system-preset/91-ostree.preset
-# Right now we aren't doing installed tests here
-rm -f %{buildroot}%{_libexecdir}/libostree/ostree-trivial-httpd
 
 # Needed to enable the service at compose time currently
 %post
@@ -146,7 +153,16 @@ rm -f %{buildroot}%{_libexecdir}/libostree/ostree-trivial-httpd
 %{_libexecdir}/libostree/grub2*
 %endif
 
+%files tests
+%{_libexecdir}/installed-tests
+%{_datadir}/installed-tests
+%{_libexecdir}/libostree/ostree-trivial-httpd
+
 %changelog
+* Thu Sep 14 2017 Colin Walters <walters@verbum.org> - 2017.11-1
+- New upstream version
+- Add tests subpackage, prep for https://fedoraproject.org/wiki/CI
+
 * Tue Aug 22 2017 Ville Skyttä <ville.skytta@iki.fi> - 2017.10-3
 - Own the %%{_libexecdir}/libostree dir
 
