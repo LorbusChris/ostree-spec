@@ -1,7 +1,7 @@
 Summary: Tool for managing bootable, immutable filesystem trees
 Name: ostree
 Version: 2017.12
-Release: 1%{?dist}
+Release: 2%{?dist}
 Source0: https://github.com/ostreedev/%{name}/releases/download/v%{version}/libostree-%{version}.tar.xz
 # https://bugzilla.redhat.com/show_bug.cgi?id=1451458
 Source1: 91-ostree.preset
@@ -127,6 +127,7 @@ install -D -m 0644 %{SOURCE1} %{buildroot}%{_prefix}/lib/systemd/system-preset/9
 %{_prefix}/lib/systemd/system-preset/91-ostree.preset
 %exclude %{_sysconfdir}/grub.d/*ostree
 %exclude %{_libexecdir}/libostree/grub2*
+%exclude %{_libexecdir}/libostree/ostree-trivial-httpd
 %{_prefix}/lib/tmpfiles.d/*
 %{_prefix}/lib/ostree/ostree-prepare-root
 %{_prefix}/lib/ostree/ostree-remount
@@ -159,6 +160,9 @@ install -D -m 0644 %{SOURCE1} %{buildroot}%{_prefix}/lib/systemd/system-preset/9
 %{_libexecdir}/libostree/ostree-trivial-httpd
 
 %changelog
+* Tue Oct 03 2017 Jonathan Lebon <jlebon@redhat.com> - 2017.12-2
+- Let tests subpackage own ostree-trivial-httpd
+
 * Mon Oct 02 2017 Colin Walters <walters@verbum.org> - 2017.12-1
 - New upstream version
 - https://github.com/ostreedev/ostree/releases/tag/v2017.12
