@@ -1,10 +1,12 @@
 Summary: Tool for managing bootable, immutable filesystem trees
 Name: ostree
 Version: 2017.13
-Release: 2%{?dist}
+Release: 3%{?dist}
 Source0: https://github.com/ostreedev/%{name}/releases/download/v%{version}/libostree-%{version}.tar.xz
 # https://bugzilla.redhat.com/show_bug.cgi?id=1451458
 Source1: 91-ostree.preset
+# Backported from upstream
+Patch0: 0001-fetcher-curl-Fix-invalid-memory-access-in-finalize.patch
 License: LGPLv2+
 URL: https://ostree.readthedocs.io/en/latest/
 
@@ -160,6 +162,10 @@ install -D -m 0644 %{SOURCE1} %{buildroot}%{_prefix}/lib/systemd/system-preset/9
 %{_libexecdir}/libostree/ostree-trivial-httpd
 
 %changelog
+* Tue Nov 07 2017 Kalev Lember <klember@redhat.com> - 2017.13-3
+- Backport a patch to fix a gnome-software crash when installing flatpaks
+  (#1497642)
+
 * Thu Nov 02 2017 Colin Walters <walters@verbum.org> - 2017.13-2
 - https://github.com/ostreedev/ostree/releases/tag/v2017.13
 
