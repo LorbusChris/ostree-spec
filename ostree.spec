@@ -1,13 +1,10 @@
 Summary: Tool for managing bootable, immutable filesystem trees
 Name: ostree
-Version: 2017.13
-Release: 4%{?dist}
+Version: 2017.14
+Release: 1%{?dist}
 Source0: https://github.com/ostreedev/%{name}/releases/download/v%{version}/libostree-%{version}.tar.xz
 # https://bugzilla.redhat.com/show_bug.cgi?id=1451458
 Source1: 91-ostree.preset
-# Backported from upstream
-Patch0: 0001-fetcher-curl-Fix-invalid-memory-access-in-finalize.patch
-Patch1: 0001-fetcher-curl-Stop-using-CURLOPT_LOW_SPEED_TIME-_LIMI.patch
 License: LGPLv2+
 URL: https://ostree.readthedocs.io/en/latest/
 
@@ -43,12 +40,9 @@ Requires: /usr/bin/gpgv2
 Requires: systemd-units
 
 %description
-OSTree is a tool for managing bootable, immutable, versioned
-filesystem trees. While it takes over some of the roles of tradtional
-"package managers" like dpkg and rpm, it is not a package system; nor
-is it a tool for managing full disk images. Instead, it sits between
-those levels, offering a blend of the advantages (and disadvantages)
-of both.
+libostree is a shared library designed primarily for
+use by higher level tools to manage host systems (e.g. rpm-ostree),
+as well as container tools like flatpak and the atomic CLI.
 
 %package libs
 Summary: Development headers for %{name}
@@ -163,6 +157,10 @@ install -D -m 0644 %{SOURCE1} %{buildroot}%{_prefix}/lib/systemd/system-preset/9
 %{_libexecdir}/libostree/ostree-trivial-httpd
 
 %changelog
+* Mon Dec 04 2017 Colin Walters <walters@verbum.org> - 2017.14-1
+- https://github.com/ostreedev/ostree/releases/tag/v2017.14
+- Update description
+
 * Mon Nov 27 2017 Colin Walters <walters@verbum.org> - 2017.13-4
 - Backport patch to drop curl low speed checks; requested by flatpak
 
