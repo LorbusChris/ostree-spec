@@ -88,12 +88,13 @@ the functionality of the installed %{name} package.
 %build
 env NOCONFIGURE=1 ./autogen.sh
 %configure --disable-silent-rules \
-	   --enable-gtk-doc \
-	   --with-selinux \
-     --with-curl \
-     --with-openssl \
-     --enable-installed-tests=exclusive \
-	   --with-dracut=yesbutnoconf
+           --enable-gtk-doc \
+           --with-selinux \
+           --with-curl \
+           --with-openssl \
+           --enable-installed-tests=exclusive \
+           --with-dracut=yesbutnoconf \
+           --disable-http2
 %make_build
 
 %install
