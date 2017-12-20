@@ -1,11 +1,10 @@
 Summary: Tool for managing bootable, immutable filesystem trees
 Name: ostree
-Version: 2017.14
-Release: 2%{?dist}
+Version: 2017.15
+Release: 1%{?dist}
 Source0: https://github.com/ostreedev/%{name}/releases/download/v%{version}/libostree-%{version}.tar.xz
 # https://bugzilla.redhat.com/show_bug.cgi?id=1451458
 Source1: 91-ostree.preset
-Patch0: 0001-build-sys-Add-disable-http2.patch
 License: LGPLv2+
 URL: https://ostree.readthedocs.io/en/latest/
 
@@ -159,6 +158,12 @@ install -D -m 0644 %{SOURCE1} %{buildroot}%{_prefix}/lib/systemd/system-preset/9
 %{_libexecdir}/libostree/ostree-trivial-httpd
 
 %changelog
+* Wed Dec 20 2017 Colin Walters <walters@verbum.org> - 2017.15-1
+- https://github.com/ostreedev/ostree/releases/tag/v2017.15
+- Drop upstreamed patches; note this build disabled HTTP2 by
+  default for now since we are hitting it with koji.  For more
+  information see https://github.com/ostreedev/ostree/issues/1362
+
 * Mon Dec 18 2017 Jonathan Lebon <jlebon@redhat.com> - 2017.14-2
 - Backport patch to drop HTTP2
 
