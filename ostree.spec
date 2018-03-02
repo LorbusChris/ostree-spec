@@ -1,10 +1,8 @@
 Summary: Tool for managing bootable, immutable filesystem trees
 Name: ostree
 Version: 2018.2
-Release: 1%{?dist}
+Release: 2%{?dist}
 Source0: https://github.com/ostreedev/%{name}/releases/download/v%{version}/libostree-%{version}.tar.xz
-# https://bugzilla.redhat.com/show_bug.cgi?id=1451458
-Source1: 91-ostree.preset
 License: LGPLv2+
 URL: https://ostree.readthedocs.io/en/latest/
 
@@ -100,7 +98,6 @@ env NOCONFIGURE=1 ./autogen.sh
 %install
 %make_install INSTALL="install -p -c"
 find %{buildroot} -name '*.la' -delete
-install -D -m 0644 %{SOURCE1} %{buildroot}%{_prefix}/lib/systemd/system-preset/91-ostree.preset
 
 # Needed to enable the service at compose time currently
 %post
@@ -122,7 +119,6 @@ install -D -m 0644 %{SOURCE1} %{buildroot}%{_prefix}/lib/systemd/system-preset/9
 %{_prefix}/lib/dracut/modules.d/98ostree/*
 %{_mandir}/man*/*.gz
 %{_prefix}/lib/systemd/system-generators/ostree-system-generator
-%{_prefix}/lib/systemd/system-preset/91-ostree.preset
 %exclude %{_sysconfdir}/grub.d/*ostree
 %exclude %{_libexecdir}/libostree/grub2*
 %exclude %{_libexecdir}/libostree/ostree-trivial-httpd
@@ -158,6 +154,10 @@ install -D -m 0644 %{SOURCE1} %{buildroot}%{_prefix}/lib/systemd/system-preset/9
 %{_libexecdir}/libostree/ostree-trivial-httpd
 
 %changelog
+* Fri Mar 02 2018 Jonathan Lebon <jlebon@redhat.com> - 2018.2-2
+- Drop ostree-remount systemd service preset, already in fedora-release
+  https://bugzilla.redhat.com/show_bug.cgi?id=1550799
+
 * Thu Feb 15 2018 Colin Walters <walters@verbum.org> - 2018.2-1
 - https://github.com/ostreedev/ostree/releases/tag/v2018.2
 
