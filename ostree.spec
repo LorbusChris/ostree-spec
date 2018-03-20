@@ -123,8 +123,7 @@ find %{buildroot} -name '*.la' -delete
 %exclude %{_libexecdir}/libostree/grub2*
 %exclude %{_libexecdir}/libostree/ostree-trivial-httpd
 %{_prefix}/lib/tmpfiles.d/*
-%{_prefix}/lib/ostree/ostree-prepare-root
-%{_prefix}/lib/ostree/ostree-remount
+%{_prefix}/lib/ostree
 # Moved in git master
 %{_libexecdir}/libostree/*
 
