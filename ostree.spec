@@ -1,7 +1,7 @@
 Summary: Tool for managing bootable, immutable filesystem trees
 Name: ostree
-Version: 2018.2
-Release: 2%{?dist}
+Version: 2018.3
+Release: 1%{?dist}
 Source0: https://github.com/ostreedev/%{name}/releases/download/v%{version}/libostree-%{version}.tar.xz
 License: LGPLv2+
 URL: https://ostree.readthedocs.io/en/latest/
@@ -153,6 +153,9 @@ find %{buildroot} -name '*.la' -delete
 %{_libexecdir}/libostree/ostree-trivial-httpd
 
 %changelog
+* Wed Mar 21 2018 Colin Walters <walters@verbum.org> - 2018.3-1
+- https://github.com/ostreedev/ostree/releases/tag/v2018.3
+
 * Fri Mar 02 2018 Jonathan Lebon <jlebon@redhat.com> - 2018.2-2
 - Drop ostree-remount systemd service preset, already in fedora-release
   https://bugzilla.redhat.com/show_bug.cgi?id=1550799
