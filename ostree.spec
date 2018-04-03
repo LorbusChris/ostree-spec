@@ -1,8 +1,10 @@
 Summary: Tool for managing bootable, immutable filesystem trees
 Name: ostree
 Version: 2018.3
-Release: 1%{?dist}
+Release: 2%{?dist}
 Source0: https://github.com/ostreedev/%{name}/releases/download/v%{version}/libostree-%{version}.tar.xz
+# Backported from upstream
+Patch0: 0001-Don-t-write-to-parent-repo.patch
 License: LGPLv2+
 URL: https://ostree.readthedocs.io/en/latest/
 
@@ -153,6 +155,9 @@ find %{buildroot} -name '*.la' -delete
 %{_libexecdir}/libostree/ostree-trivial-httpd
 
 %changelog
+* Tue Apr 03 2018 Kalev Lember <klember@redhat.com> - 2018.3-2
+- Backport a patch to avoid writing to parent repo
+
 * Wed Mar 21 2018 Colin Walters <walters@verbum.org> - 2018.3-1
 - https://github.com/ostreedev/ostree/releases/tag/v2018.3
 
