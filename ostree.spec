@@ -1,9 +1,10 @@
 Summary: Tool for managing bootable, immutable filesystem trees
 Name: ostree
 Version: 2018.6
-Release: 3%{?dist}
+Release: 4%{?dist}
 Source0: https://github.com/ostreedev/%{name}/releases/download/v%{version}/libostree-%{version}.tar.xz
 Patch32: 0001-lib-repo-Fix-32-bit-format-string-error.patch
+Patch33: 0001-switchroot-Fix-regression-for-separately-mounted-var.patch
 License: LGPLv2+
 URL: https://ostree.readthedocs.io/en/latest/
 
@@ -154,6 +155,10 @@ find %{buildroot} -name '*.la' -delete
 %{_libexecdir}/libostree/ostree-trivial-httpd
 
 %changelog
+* Wed Jul 04 2018 Jonathan Lebon <jonathan@jlebon.com> - 2018.6-4
+- Backport patch to fix /var mountpoints
+  https://github.com/ostreedev/ostree/issues/1667
+
 * Thu Jun 21 2018 Colin Walters <walters@redhat.com> - 2018.6-3
 - https://github.com/ostreedev/ostree/releases/tag/v2018.6
 
