@@ -1,10 +1,8 @@
 Summary: Tool for managing bootable, immutable filesystem trees
 Name: ostree
-Version: 2018.6
-Release: 5%{?dist}
+Version: 2018.7
+Release: 1%{?dist}
 Source0: https://github.com/ostreedev/%{name}/releases/download/v%{version}/libostree-%{version}.tar.xz
-Patch32: 0001-lib-repo-Fix-32-bit-format-string-error.patch
-Patch33: 0001-switchroot-Fix-regression-for-separately-mounted-var.patch
 License: LGPLv2+
 URL: https://ostree.readthedocs.io/en/latest/
 
@@ -155,6 +153,9 @@ find %{buildroot} -name '*.la' -delete
 %{_libexecdir}/libostree/ostree-trivial-httpd
 
 %changelog
+* Fri Jul 20 2018 Colin Walters <walters@verbum.org> - 2018.7-1
+- https://github.com/ostreedev/ostree/releases/tag/v2018.7
+
 * Fri Jul 13 2018 Fedora Release Engineering <releng@fedoraproject.org> - 2018.6-5
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_29_Mass_Rebuild
 
