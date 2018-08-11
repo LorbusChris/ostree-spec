@@ -44,24 +44,21 @@ as well as container tools like flatpak and the atomic CLI.
 
 %package libs
 Summary: Development headers for %{name}
-Group: Development/Libraries
 
 %description libs
 The %{name}-libs provides shared libraries for %{name}.
 
 %package devel
 Summary: Development headers for %{name}
-Group: Development/Libraries
 Requires: %{name}-libs =  %{?epoch:%{epoch}:}%{version}-%{release}
 
 %description devel
 The %{name}-devel package includes the header files for the %{name} library.
 
-%ifnarch s390 s390x %{arm}
+%ifnarch s390 s390x
 %package grub2
 Summary: GRUB2 integration for OSTree
-Group: Development/Libraries
-%ifnarch aarch64
+%ifnarch aarch64 %{arm}
 Requires: grub2
 %else
 Requires: grub2-efi
@@ -140,7 +137,7 @@ find %{buildroot} -name '*.la' -delete
 %{_datadir}/gtk-doc/html/ostree
 %{_datadir}/gir-1.0/OSTree-1.0.gir
 
-%ifnarch s390 s390x %{arm}
+%ifnarch s390 s390x
 %files grub2
 %{_sysconfdir}/grub.d/*ostree
 %dir %{_libexecdir}/libostree
@@ -153,6 +150,9 @@ find %{buildroot} -name '*.la' -delete
 %{_libexecdir}/libostree/ostree-trivial-httpd
 
 %changelog
+* Sun Aug 12 2018 Peter Robinson <pbrobinson@fedoraproject.org> 2018.7-2
+- Enable grub2 support on ARMv7
+
 * Fri Jul 20 2018 Colin Walters <walters@verbum.org> - 2018.7-1
 - https://github.com/ostreedev/ostree/releases/tag/v2018.7
 
