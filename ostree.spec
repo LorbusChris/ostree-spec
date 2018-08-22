@@ -1,7 +1,7 @@
 Summary: Tool for managing bootable, immutable filesystem trees
 Name: ostree
-Version: 2018.7
-Release: 2%{?dist}
+Version: 2018.8
+Release: 1%{?dist}
 Source0: https://github.com/ostreedev/%{name}/releases/download/v%{version}/libostree-%{version}.tar.xz
 License: LGPLv2+
 URL: https://ostree.readthedocs.io/en/latest/
@@ -150,6 +150,9 @@ find %{buildroot} -name '*.la' -delete
 %{_libexecdir}/libostree/ostree-trivial-httpd
 
 %changelog
+* Wed Aug 22 2018 Colin Walters <walters@verbum.org> - 2018.8-1
+- https://github.com/ostreedev/ostree/releases/tag/v2018.8
+
 * Sun Aug 12 2018 Peter Robinson <pbrobinson@fedoraproject.org> 2018.7-2
 - Enable grub2 support on ARMv7
 
