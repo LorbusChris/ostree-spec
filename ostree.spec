@@ -43,6 +43,7 @@ BuildRequires:  bison
 Requires: dracut
 Requires: /usr/bin/gpgv2
 Requires: systemd-units
+Requires: %{name}-libs%{?_isa} = %{?epoch:%{epoch}:}%{version}-%{release}
 
 %description
 libostree is a shared library designed primarily for
@@ -57,7 +58,7 @@ The %{name}-libs provides shared libraries for %{name}.
 
 %package devel
 Summary: Development headers for %{name}
-Requires: %{name}-libs =  %{?epoch:%{epoch}:}%{version}-%{release}
+Requires: %{name}-libs%{?_isa} = %{?epoch:%{epoch}:}%{version}-%{release}
 
 %description devel
 The %{name}-devel package includes the header files for the %{name} library.
@@ -79,7 +80,8 @@ GRUB2 integration for OSTree
 %if %{with tests}
 %package tests
 Summary: Tests for the %{name} package
-Requires: %{name}%{?_isa} = %{version}-%{release}
+Requires: %{name}%{?_isa} = %{?epoch:%{epoch}:}%{version}-%{release}
+Requires: %{name}-libs%{?_isa} = %{?epoch:%{epoch}:}%{version}-%{release}
 
 %description tests
 This package contains tests that can be used to verify
