@@ -121,7 +121,7 @@ find %{buildroot} -name '*.la' -delete
 %{_datadir}/ostree
 %{_datadir}/bash-completion/completions/*
 %dir %{_prefix}/lib/dracut/modules.d/98ostree
-%{_prefix}/lib/systemd/system/ostree*.service
+%{_prefix}/lib/systemd/system/ostree*.*
 %{_prefix}/lib/dracut/modules.d/98ostree/*
 %{_mandir}/man*/*.gz
 %{_prefix}/lib/systemd/system-generators/ostree-system-generator
