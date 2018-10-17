@@ -1,3 +1,10 @@
+# Don't ship tests on RHEL > 7.
+%if 0%{?rhel} > 7
+    %bcond_with tests
+%else
+    %bcond_without tests
+%endif
+
 Summary: Tool for managing bootable, immutable filesystem trees
 Name: ostree
 Version: 2018.8
@@ -69,6 +76,7 @@ Requires: ostree
 GRUB2 integration for OSTree
 %endif
 
+%if %{with tests}
 %package tests
 Summary: Tests for the %{name} package
 Requires: %{name}%{?_isa} = %{version}-%{release}
@@ -76,6 +84,7 @@ Requires: %{name}%{?_isa} = %{version}-%{release}
 %description tests
 This package contains tests that can be used to verify
 the functionality of the installed %{name} package.
+%endif
 
 %prep
 %autosetup -Sgit -n libostree-%{version}
@@ -87,7 +96,7 @@ env NOCONFIGURE=1 ./autogen.sh
            --with-selinux \
            --with-curl \
            --with-openssl \
-           --enable-installed-tests=exclusive \
+           %{?with_tests:--enable-installed-tests=exclusive} \
            --with-dracut=yesbutnoconf \
            --disable-http2
 %make_build
@@ -144,12 +153,17 @@ find %{buildroot} -name '*.la' -delete
 %{_libexecdir}/libostree/grub2*
 %endif
 
+%if %{with tests}
 %files tests
 %{_libexecdir}/installed-tests
 %{_datadir}/installed-tests
 %{_libexecdir}/libostree/ostree-trivial-httpd
+%endif
 
 %changelog
+* Wed Oct 17 2018 Jonathan Lebon <jonathan@jlebon.com>
+- Add conditional for tests and disable by default on RHEL > 7
+
 * Wed Aug 22 2018 Colin Walters <walters@verbum.org> - 2018.8-1
 - https://github.com/ostreedev/ostree/releases/tag/v2018.8
 
