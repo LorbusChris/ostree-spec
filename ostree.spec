@@ -1,3 +1,8 @@
+%global build_timestamp %(date +"%Y%m%d%H%M%%S")
+%global ostree_branch master
+%global bsdiff_commit 1edf9f656850c0c64dae260960fabd8249ea9c60
+%global libglnx_commit 470af8763ff7b99bec950a6ae0a957c1dcfc8edd
+
 # Don't ship tests on RHEL > 7.
 %if 0%{?rhel} > 7
     %bcond_with tests
@@ -7,9 +12,11 @@
 
 Summary: Tool for managing bootable, immutable filesystem trees
 Name: ostree
-Version: 2018.8
+Version: %{build_timestamp}
 Release: 1%{?dist}
-Source0: https://github.com/ostreedev/%{name}/releases/download/v%{version}/libostree-%{version}.tar.xz
+Source0: https://github.com/ostreedev/%{name}/archive/%{ostree_branch}.tar.gz
+Source1: https://github.com/mendsley/bsdiff/archive/%{bsdiff_commit}.tar.gz
+Source2: https://gitlab.gnome.org/GNOME/libglnx/-/archive/%{libglnx_commit}/libglnx-%{libglnx_commit}.tar.gz
 License: LGPLv2+
 URL: https://ostree.readthedocs.io/en/latest/
 
@@ -89,7 +96,11 @@ the functionality of the installed %{name} package.
 %endif
 
 %prep
-%autosetup -Sgit -n libostree-%{version}
+%autosetup -Sgit -n ostree-master
+mkdir -p %{_builddir}/ostree-master/bsdiff
+gzip -dc %{_sourcedir}/%{bsdiff_commit}.tar.gz | tar -xof - --directory %{_builddir}/ostree-master/bsdiff --strip-components=1
+mkdir -p %{_builddir}/ostree-master/libglnx
+gzip -dc %{_sourcedir}/libglnx-%{libglnx_commit}.tar.gz | tar -xof - --directory %{_builddir}/ostree-master/libglnx --strip-components=1
 
 %build
 env NOCONFIGURE=1 ./autogen.sh
